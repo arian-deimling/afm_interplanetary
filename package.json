@@ -1,0 +1,29 @@
+{
+  "name": "afm_interplanetary",
+  "version": "1.0.0",
+  "description": "Website for AFM Interplanetary",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "Arian Deimling, Fehintola Kofo-Idowu, Mir Patel",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "express-validator": "^6.14.0",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arian-deimling/afm_interplanetary.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arian-deimling/afm_interplanetary/issues"
+  },
+  "homepage": "https://github.com/arian-deimling/afm_interplanetary#readme"
+}
