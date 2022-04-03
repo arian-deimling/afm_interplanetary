@@ -9,8 +9,8 @@
   <script src=login.js></script>
 </head>
 <body>
-  <div id=main>
-    <div id=main-column>
+  <div id=main class=flex-rows>
+    <div id=main-column class=flex-cols>
       <div id=nav-bar>
         <div id=nav-bar-left>
           <a href='/'>Home</a>
@@ -23,8 +23,8 @@
       <header>
         <h1>AFM Interplanetary</h1>
       </header>
-      <div id=form-div>
-        <form action=/loginuser method=post>
+      <div id=form-div class="flex-rows center">
+        <form class=flex-cols action=/loginuser method=post>
           <h2 class=no-margin-top>Login</h2>
           <input id=username type=text name=username placeholder=Username>
           <div class=left-justify-children> 
