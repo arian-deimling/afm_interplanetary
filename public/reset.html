@@ -7,17 +7,18 @@
   <link rel=stylesheet href=main.css>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src=config/validation.config.js></script>
-  <script src=signup.js></script>
+  <script src=reset.js></script>
 </head>
 <body>
   <div id=main class=flex-rows>
     <div id=main-column class=flex-cols>
       <div id=nav-bar>
         <div id=nav-bar-left>
-          <a href="/">Home</a>
+          <a href='/'>Home</a>
           <a href=/about>About</a>
         </div>
         <div id=nav-bar-right>
+          <a id=signup-link href=/signup>Sign Up</a>
           <a id=login-link href=/login>Login</a>
         </div>
       </div>
@@ -26,15 +27,10 @@
       </header>
       <div id=form-div class="flex-rows center">
         <form class=flex-cols action=/ method=post>
-          <h2 class=no-margin-top>Sign Up</h2>
+          <h2 class=no-margin-top>Reset Password</h2>
           <input id=username type=text name=username placeholder=Username>
-          <input id=password type=password name=password placeholder='Choose Password'>
-          <input id=pass_verify type=password name=pass_verify placeholder='Confirm Password'>
-          <select id=security_question_id name=security_question_id>
-            <option value=0>Select a security question...</option>
-          </select>
-          <input id=security_question_answer type=text name=security_question_answer placeholder='Security Question Answer'>
-          <input id=submit-form type=submit value='Create Account' on>
+          <!-- <input id=password type=password name=password placeholder=Password> -->
+          <input id=submit-login type=submit value=Submit on>
         </form>
       </div>
     </div>

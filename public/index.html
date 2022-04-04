@@ -5,6 +5,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@85,302;85,699&display=swap" rel="stylesheet">
   <link rel=stylesheet href=main.css>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src=index.js></script>
 </head>
 <body>
   <div id=main class=flex-rows>
@@ -14,9 +16,10 @@
           <a href=/about>About</a>
         </div>
         <div id=nav-bar-right>
-          <a href=/reservation>Reservations</a>
-          <a href=/signup>Sign Up</a>
-          <a href=/login>Login</a>
+          <a id=signup-link href=/signup>Sign Up</a>
+          <a id=login-link href=/login>Login</a>
+          <a id=logout-link href=/api/logout>Logout</a>
+          <a id=reservation-link href=/reservation>Reservations</a>
         </div>
       </div>
       <header>
