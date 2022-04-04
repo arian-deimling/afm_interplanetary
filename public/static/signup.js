@@ -78,6 +78,8 @@ const checkSecurityQuestionAnswer = () => {
 
 $(() => {
 
+    hideById('logout-link', 'reservation-link', 'signup-link');
+
     let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = () => {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {

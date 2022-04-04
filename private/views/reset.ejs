@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%- include('./partials/_head_meta'); %>
+  <script src=reset.js></script>
+</head>
+<body>
+  <div id=main class=flex-rows>
+    <div id=main-column class=flex-cols>
+      <%- include('./partials/_nav'); %>
+      <%- include('./partials/_header'); %>
+      <div id=form-div class="flex-rows center">
+        <form class=flex-cols action=/ method=post>
+          <h2 class=no-margin-top>Reset Password</h2>
+          <input id=username type=text name=username placeholder=Username>
+          <input id=submit-login type=submit value=Submit on>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

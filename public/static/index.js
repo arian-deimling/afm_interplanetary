@@ -1,6 +1,8 @@
 'use strict';
 
 $(() => {
+
+  hideById('home-link');
   
   let xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = () => {
@@ -8,13 +10,11 @@ $(() => {
 
         // user is logged in
         if (xmlHttp.status == 200) {
-          $('#login-link').attr('hidden', 'true');
-          $('#signup-link').attr('hidden', 'true');
+          hideById('login-link', 'signup-link');
 
         // user is not logged in
         } else if (xmlHttp.status == 400) {
-          $('#reservation-link').attr('hidden', 'true');
-          $('#logout-link').attr('hidden', 'true');
+          hideById('reservation-link', 'logout-link');
         }
       }
   }

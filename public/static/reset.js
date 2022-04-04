@@ -33,6 +33,8 @@ const checkPassVerify = () => {
 
 $(() => {
 
+	hideById('reservation-link', 'logout-link');
+
   $('#username').on('keyup', () => {
     $('#username')[0].setCustomValidity('');
     $('#username')[0].reportValidity();

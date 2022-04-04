@@ -14,6 +14,8 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.set('views', './private/views');
+app.set('view engine', 'ejs');
 
 db.connection.sync().then(() => {});
 
@@ -38,7 +40,7 @@ app.use(express.static(path.join(__dirname, '/public/static')));
 
 // serve main page
 app.get(['/', '/index', '/index.html'], (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'));
+    res.render('index');
 });
 
 app.get(['/signup', '/signup.html'], (req, res) => {
@@ -47,7 +49,7 @@ app.get(['/signup', '/signup.html'], (req, res) => {
         res.redirect('/');
         return;
     }
-    res.sendFile(path.join(__dirname, '/public/signup.html'));
+    res.render('signup');
 });
 
 app.get(['/login', '/login.html'], (req, res) => {
@@ -56,7 +58,7 @@ app.get(['/login', '/login.html'], (req, res) => {
         res.redirect('/');
         return;
     }
-    res.sendFile(path.join(__dirname, '/public/login.html'));
+    res.render('login');
 });
 
 app.get(['/reset', '/reset.html'], (req, res) => {
@@ -65,7 +67,7 @@ app.get(['/reset', '/reset.html'], (req, res) => {
         res.redirect('/');
         return;
     }
-    res.sendFile(path.join(__dirname, '/public/reset.html'));
+    res.render('reset');
 });
 
 app.listen(PORT, () =>{
