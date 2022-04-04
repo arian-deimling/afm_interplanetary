@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%- include('./partials/_head_meta'); %>
+  <script src=index.js></script>
+</head>
+<body>
+  <div id=main class=flex-rows>
+    <div id=main-column class=flex-cols>
+      <%- include('./partials/_nav'); %>
+      <%- include('./partials/_header'); %>
+      <div id=about-text class="flex-rows center">
+        <!-- TODO(AD) - this is really bad - <p> shouldn't be inside of form.... -->
+        <!-- TODO(AD) - rewrite this paragraph and add whatever other information is needed.
+                (i.e. group member names (and contact info), sources (bg img), technologies, etc) -->
+        <form> 
+          <p>We are going to create a website for our futuristic company, AM interplanetary, which will be offering space shuttle service to the moon beginning in Summer 2022. The website is for our company AM interplanetary, which offers luxurious space travel to the moon for a brief moonwalk with two ticket options, one way and round trip. The website will feature a main page that will state the mission statement and a little bit on covid 19 restrictions and policies and terms of agreement. From there, to make any reservations, the user will have to either log in to an existing account or sign up and create an account before making any reservations or purchases. After the user has logged in, the user will be redirected back to the main page in which they will have the option to make a reservation or see their existing reservation and cancel it. Making a reservation will lead to a page containing the time and date of travel and whether it’s a one way or round trip travel. From there, the user will be prompted to click a next button in which it will lead to a menu selection of the available seats and the description of the seats, like first class, business, etc. Each seat will have a button in which you can click and view the description of each. After the selection process, they will be led into a secure page for purchases via credit or debit card. Once a purchase has been made, the user can view their existing reservations from the main page.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

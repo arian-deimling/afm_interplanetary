@@ -2,7 +2,14 @@
 
 $(() => {
 
-  hideById('home-link');
+  // hide home link if we are on the home page
+  if (window.location.pathname === '/') {
+    hideById('home-link');
+  }
+  // hide about link if we are on the about page
+  if (window.location.pathname === '/about') {
+    hideById('about-link');
+  }
   
   let xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = () => {

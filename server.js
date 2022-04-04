@@ -38,12 +38,31 @@ require('./private/routes/user.routes')(app);
 // serves static files
 app.use(express.static(path.join(__dirname, '/public/static')));
 
-// serve main page
-app.get(['/', '/index', '/index.html'], (req, res) => {
-    res.render('index');
+// page aliases redirect only
+app.get(['/index', '/index.html'], (req, res) => {
+    res.redirect('/');
+});
+app.get('/about.html', (req, res) => {
+    res.redirect('/about');
+});
+app.get('/signup.html', (req, res) => {
+    res.redirect('/signup');
+});
+app.get('/login.html', (req, res) => {
+    res.redirect('/login');
+});
+app.get('/reset.html', (req, res) => {
+    res.redirect('/reset');
 });
 
-app.get(['/signup', '/signup.html'], (req, res) => {
+// serve pages
+app.get('/', (req, res) => {
+    res.render('index');
+});
+app.get('/about', (req, res) => {
+    res.render('about');
+});
+app.get('/signup', (req, res) => {
     // if the user is logged in, redirect them to the home page
     if (req.session.username) {
         res.redirect('/');
@@ -51,8 +70,7 @@ app.get(['/signup', '/signup.html'], (req, res) => {
     }
     res.render('signup');
 });
-
-app.get(['/login', '/login.html'], (req, res) => {
+app.get('/login', (req, res) => {
     // if the user is logged in, redirect them to the home page
     if (req.session.username) {
         res.redirect('/');
@@ -60,8 +78,7 @@ app.get(['/login', '/login.html'], (req, res) => {
     }
     res.render('login');
 });
-
-app.get(['/reset', '/reset.html'], (req, res) => {
+app.get('/reset', (req, res) => {
     // if the user is logged in, redirect them to the home page
     if (req.session.username) {
         res.redirect('/');
