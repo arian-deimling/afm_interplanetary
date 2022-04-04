@@ -1,3 +1,4 @@
+// TODO(AD) - update DB info
 module.exports = {
   HOST: 'localhost',
   PORT: 3306,
