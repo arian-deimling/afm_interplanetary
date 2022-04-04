@@ -13,7 +13,14 @@
         <form class=flex-cols action=/ method=post>
           <h2 class=no-margin-top>Reset Password</h2>
           <input id=username type=text name=username placeholder=Username>
-          <input id=submit-login type=submit value=Submit on>
+          <input id=submit-user type=submit value=Submit on>
+          <select hidden id=security_question_id name=security_question_id disabled>
+            <option value=0></option>
+          </select>
+          <input hidden id=security_question_answer type=text name=security_question_answer placeholder="Security Question Answer">
+          <input hidden id=password type=password name=password placeholder="Choose New Password">
+          <input hidden id=pass_verify type=password name=pass_verify placeholder="Confirm New Password">
+          <input hidden id=submit-reset type=submit value="Reset Password" on>  
         </form>
       </div>
     </div>

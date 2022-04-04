@@ -391,6 +391,7 @@ const resetPassword = async (req, res) => {
       what: 'security_question_answer',
       message: 'Security question answer is incorrect.',
     });
+    return;
   }
 
   // hash the user's new password
