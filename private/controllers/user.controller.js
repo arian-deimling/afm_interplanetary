@@ -226,7 +226,7 @@ const create = async (req, res) => {
 };
 
 // controller to check whether a user is logged in
-const checkLogin = (req, res) => {
+const checkLogin = async (req, res) => {
   // send OK status if there is a valid, active session; otherwise 400
   if (req.session.username) {
     res.sendStatus(200);
@@ -236,7 +236,7 @@ const checkLogin = (req, res) => {
 };
 
 // controller to log a user out
-const logout = (req, res) => {
+const logout = async (req, res) => {
   if (req.session.username) {
     req.session.username = '';
     res.redirect('/');
@@ -419,12 +419,13 @@ const resetPassword = async (req, res) => {
   res.sendStatus(200);
 };
 
-const user_controller = {};
-user_controller.login = login;
-user_controller.create = create;
-user_controller.checkLogin = checkLogin;
-user_controller.logout = logout;
-user_controller.findUser = findUser;
-user_controller.resetPassword = resetPassword;
+const user_controller = {
+  login: login,
+  create: create,
+  checkLogin: checkLogin,
+  logout: logout,
+  findUser: findUser,
+  resetPassword: resetPassword,
+};
 
 module.exports = user_controller;

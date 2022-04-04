@@ -14,10 +14,13 @@ const userRoutes = app => {
   // check the user's login status
   router.get('/login', user_controller.checkLogin);
 
+  // log the user out
   router.get('/logout', user_controller.logout);
 
+  // get security question for a user
   router.post('/finduser', user_controller.findUser);
 
+  // update a user's password
   router.post('/reset', user_controller.resetPassword);
 
   app.use('/api', router);
