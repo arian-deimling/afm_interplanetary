@@ -24,28 +24,28 @@ db.security_question = SecurityQuestion
 // add security questions to the security question table
 db.security_question.sync({ force: true }).then(async () => {
   await db.security_question.create({
-    question: "What was your childhood nickname?"
+    question: 'What was your childhood nickname?'
   });
   await db.security_question.create({
-    question: "In what city did you meet your spouse/significant other?"
+    question: 'In what city did you meet your spouse/significant other?'
   });
   await db.security_question.create({
-    question: "What is the name of your favorite childhood friend?"
+    question: 'What is the name of your favorite childhood friend?'
   });
   await db.security_question.create({
-    question: "What street did you live on in third grade?"
+    question: 'What street did you live on in third grade?'
   });
   await db.security_question.create({
-    question: "What is the middle name of your youngest child?"
+    question: 'What is the middle name of your youngest child?'
   });
   await db.security_question.create({
-    question: "What is your oldest sibling's middle name?"
+    question: 'What is your oldest sibling's middle name?'
   });
   await db.security_question.create({
-    question: "What school did you attend for sixth grade?"
+    question: 'What school did you attend for sixth grade?'
   });
   await db.security_question.create({
-    question: "What is your oldest cousin's first and last name?"
+    question: 'What is your oldest cousin's first and last name?'
   });
 });
 

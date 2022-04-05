@@ -6,10 +6,10 @@ const userRoutes = app => {
   let router = require('express').Router();
 
   // create a new user
-  router.post("/signup", user_controller.create);
+  router.post('/signup', user_controller.create);
 
   // login the user
-  router.post("/login", user_controller.login);
+  router.post('/login', user_controller.login);
 
   // check the user's login status
   router.get('/login', user_controller.checkLogin);

@@ -2,4 +2,4 @@ AD - update DB username/password info -> update README.md
 AD - remove all secrets from code committed to github (.env file?)
 
 LINE_COUNT:
-find private public -type f -not -name "*.jpg" > files.txt && echo -e ".gitignore\nREADME.md\nserver.js\nTODO" >> files.txt && cat files.txt | xargs wc -l && trash files.txt
+cat <(find private public -type f -not -name '*.jpg')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 

@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require('../models');
 
 const SecurityQuestion = db.security_question;
 

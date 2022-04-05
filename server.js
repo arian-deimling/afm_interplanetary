@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const db = require('./private/models/index');
 const sessionConfig = require('./private/config/session.config');
-const SessionStore = require("express-session-sequelize")(session.Store);
+const SessionStore = require('express-session-sequelize')(session.Store);
 const app = express();
 
 const PORT = 8080;

@@ -4,7 +4,7 @@ const securityQuestionRoutes = app => {
   let router = require('express').Router();
 
   // get all security questions
-  router.get("/security_questions", security_question_control.getQuestions);
+  router.get('/security_questions', security_question_control.getQuestions);
 
   app.use('/api', router);
 };
