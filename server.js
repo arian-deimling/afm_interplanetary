@@ -39,21 +39,12 @@ require('./private/routes/user.routes')(app);
 app.use(express.static(path.join(__dirname, '/public/static')));
 
 // page aliases redirect only
-app.get(['/index', '/index.html'], (req, res) => {
-    res.redirect('/');
-});
-app.get('/about.html', (req, res) => {
-    res.redirect('/about');
-});
-app.get('/signup.html', (req, res) => {
-    res.redirect('/signup');
-});
-app.get('/login.html', (req, res) => {
-    res.redirect('/login');
-});
-app.get('/reset.html', (req, res) => {
-    res.redirect('/reset');
-});
+app.get(['/index', '/index.html'], (req, res) => res.redirect('/'));
+app.get('/about.html', (_, res) => res.redirect('/about'));
+app.get('/signup.html', (_, res) => res.redirect('/signup'));
+app.get('/login.html', (_, res) => res.redirect('/login'));
+app.get('/reset.html', (_, res) => res.redirect('/reset'));
+app.get('/reservation.html', (_, res) => res.redirect('/reservation'));
 
 // serve pages
 app.get('/', (req, res) => {
@@ -85,6 +76,14 @@ app.get('/reset', (req, res) => {
         return;
     }
     res.render('reset');
+});
+app.get('/reservation', (req, res) => {
+    // if the user is not logged in, redirect them to the home page
+    if (!req.session.userID) {
+        res.redirect('/');
+        return;
+    }
+    res.render('reservation');
 });
 
 app.listen(PORT, () =>{

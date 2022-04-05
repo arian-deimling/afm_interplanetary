@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%- include('./partials/_head_meta'); %>
+  <script src=reservation.js></script>
+</head>
+<body>
+  <div id=main class=flex-rows>
+    <div id=main-column class=flex-cols>
+      <%- include('./partials/_nav'); %>
+      <%- include('./partials/_header'); %>
+      <div id=form-div class="flex-rows center">
+        <form class=flex-cols action=/ method=post>
+          <h2 class=no-margin-top>New Reservation</h2>
+          <!-- <input id=username type=text name=username placeholder=Username>
+          <input id=password type=password name=password placeholder='Choose Password'>
+          <input id=pass_verify type=password name=pass_verify placeholder='Confirm Password'>
+          <select id=security_question_id name=security_question_id>
+            <option value=0>Select a security question...</option>
+          </select>
+          <input id=security_question_answer type=text name=security_question_answer placeholder='Security Question Answer'> -->
+          <input id=submit-form type=submit value='Submit' on>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
