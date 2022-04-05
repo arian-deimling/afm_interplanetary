@@ -64,7 +64,7 @@ app.get('/about', (req, res) => {
 });
 app.get('/signup', (req, res) => {
     // if the user is logged in, redirect them to the home page
-    if (req.session.username) {
+    if (req.session.userID) {
         res.redirect('/');
         return;
     }
@@ -72,7 +72,7 @@ app.get('/signup', (req, res) => {
 });
 app.get('/login', (req, res) => {
     // if the user is logged in, redirect them to the home page
-    if (req.session.username) {
+    if (req.session.userID) {
         res.redirect('/');
         return;
     }
@@ -80,7 +80,7 @@ app.get('/login', (req, res) => {
 });
 app.get('/reset', (req, res) => {
     // if the user is logged in, redirect them to the home page
-    if (req.session.username) {
+    if (req.session.userID) {
         res.redirect('/');
         return;
     }

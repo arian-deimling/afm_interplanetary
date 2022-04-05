@@ -76,7 +76,7 @@ const login = async (req, res) => {
   }
 
   // if login is successful, set session username and send OK status
-  req.session.username = clientCredentials.username;
+  req.session.userID = usersQueryResult[0].dataValues.id;
   res.sendStatus(200);
   return;
 };
@@ -228,7 +228,7 @@ const create = async (req, res) => {
 // controller to check whether a user is logged in
 const checkLogin = async (req, res) => {
   // send OK status if there is a valid, active session; otherwise 400
-  if (req.session.username) {
+  if (req.session.userID) {
     res.sendStatus(200);
   } else {
     res.sendStatus(400)
@@ -237,8 +237,8 @@ const checkLogin = async (req, res) => {
 
 // controller to log a user out
 const logout = async (req, res) => {
-  if (req.session.username) {
-    req.session.username = '';
+  if (req.session.userID) {
+    req.session.userID = 0;
     res.redirect('/');
   } else {
     res.redirect('/');
