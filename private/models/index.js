@@ -39,13 +39,13 @@ db.security_question.sync({ force: true }).then(async () => {
     question: 'What is the middle name of your youngest child?'
   });
   await db.security_question.create({
-    question: 'What is your oldest sibling's middle name?'
+    question: "What is your oldest sibling's middle name?"
   });
   await db.security_question.create({
     question: 'What school did you attend for sixth grade?'
   });
   await db.security_question.create({
-    question: 'What is your oldest cousin's first and last name?'
+    question: "What is your oldest cousin's first and last name?"
   });
 });
 
