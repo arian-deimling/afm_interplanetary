@@ -5,22 +5,28 @@
   <script src=login.js></script>
 </head>
 <body>
+
+  <!-- page layout divs -->
   <div id=main class=flex-rows>
     <div id=main-column class=flex-cols>
+
+      <!-- nav bar and website title -->
       <%- include('./partials/_nav'); %>
       <%- include('./partials/_header'); %>
-      <div id=form-div class="flex-rows center">
+
+      <!-- form layout div -->
+      <div id=form-div class='flex-rows center'>
         <form class=flex-cols action=/ method=post>
+
+          <!-- form header -->
           <h2 class=no-margin-top>Login</h2>
-          <input id=username type=text name=username placeholder=Username>
-          <div class=left-justify-children> 
-            <p class=form-error id=username-error></p>
-          </div>
-          <input id=password type=password name=password placeholder=Password>
-          <div class=left-justify-children> 
-            <p class=form-error id=password-error></p>
-          </div>
-          <input id=submit-login type=submit value=Login on>
+
+          <!-- form fields -->
+          <input  id=username     type=text     name=username     placeholder=Username>
+          <input  id=password     type=password name=password     placeholder=Password>
+          <input  id=submit-login type=submit   name=submit-login value=Login on>
+
+          <!-- reset password link -->
           <a href=/reset>Forgot your password?</a>
         </form>
       </div>

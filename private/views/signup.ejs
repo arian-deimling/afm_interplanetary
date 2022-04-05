@@ -5,21 +5,29 @@
   <script src=signup.js></script>
 </head>
 <body>
+
+  <!-- page layout divs -->
   <div id=main class=flex-rows>
     <div id=main-column class=flex-cols>
+
+      <!-- nav bar and website title -->
       <%- include('./partials/_nav'); %>
       <%- include('./partials/_header'); %>
-      <div id=form-div class="flex-rows center">
+
+      <!-- form layout div -->
+      <div id=form-div class='flex-rows center'>
         <form class=flex-cols action=/ method=post>
+
+          <!-- form header -->
           <h2 class=no-margin-top>Sign Up</h2>
-          <input id=username type=text name=username placeholder=Username>
-          <input id=password type=password name=password placeholder='Choose Password'>
-          <input id=pass_verify type=password name=pass_verify placeholder='Confirm Password'>
-          <select id=security_question_id name=security_question_id>
-            <option value=0>Select a security question...</option>
-          </select>
-          <input id=security_question_answer type=text name=security_question_answer placeholder='Security Question Answer'>
-          <input id=submit-form type=submit value='Create Account' on>
+
+          <!-- form fields -->
+          <input  id=username                 type=text     name=username                 placeholder=Username>
+          <input  id=password                 type=password name=password                 placeholder='Choose Password'>
+          <input  id=pass_verify              type=password name=pass_verify              placeholder='Confirm Password'>
+          <select id=security_question_id                   name=security_question_id     enabled><option value=0>Select a security question...</option></select>
+          <input  id=security_question_answer type=text     name=security_question_answer placeholder='Security Question Answer'>
+          <input  id=submit-signup            type=submit   name=submit-signup            value='Create Account' on>
         </form>
       </div>
     </div>

@@ -5,13 +5,22 @@
   <script src=reservation.js></script>
 </head>
 <body>
+  <!-- page layout divs -->
   <div id=main class=flex-rows>
     <div id=main-column class=flex-cols>
+
+      <!-- nav bar and website title -->
       <%- include('./partials/_nav'); %>
       <%- include('./partials/_header'); %>
-      <div id=form-div class="flex-rows center">
+
+      <!-- form layout div -->
+      <div id=form-div class='flex-rows center'>
         <form class=flex-cols action=/ method=post>
+
+          <!-- form header -->
           <h2 class=no-margin-top>New Reservation</h2>
+
+          <!-- form fields -->
           <!-- <input id=username type=text name=username placeholder=Username>
           <input id=password type=password name=password placeholder='Choose Password'>
           <input id=pass_verify type=password name=pass_verify placeholder='Confirm Password'>

@@ -5,22 +5,32 @@
   <script src=reset.js></script>
 </head>
 <body>
+
+  <!-- page layout divs -->
   <div id=main class=flex-rows>
     <div id=main-column class=flex-cols>
+
+      <!-- nav bar and website title -->
       <%- include('./partials/_nav'); %>
       <%- include('./partials/_header'); %>
-      <div id=form-div class="flex-rows center">
+
+      <!-- form layout div -->
+      <div id=form-div class='flex-rows center'>
         <form class=flex-cols action=/ method=post>
+
+          <!-- form header -->
           <h2 class=no-margin-top>Reset Password</h2>
-          <input id=username type=text name=username placeholder=Username>
-          <input id=submit-user type=submit value=Submit on>
-          <select hidden id=security_question_id name=security_question_id disabled>
-            <option value=0></option>
-          </select>
-          <input hidden id=security_question_answer type=text name=security_question_answer placeholder="Security Question Answer">
-          <input hidden id=password type=password name=password placeholder="Choose New Password">
-          <input hidden id=pass_verify type=password name=pass_verify placeholder="Confirm New Password">
-          <input hidden id=submit-reset type=submit value="Reset Password" on>  
+
+          <!-- initial form fields -->
+          <input          id=username                 type=text     name=username                 placeholder=Username>
+          <input          id=submit-user              type=submit   name=submit-user              value=Submit on>
+
+          <!-- initially hidden form fields -->
+          <select hidden  id=security_question_id                   name=security_question_id     disabled><option value=0></option></select>
+          <input  hidden  id=security_question_answer type=text     name=security_question_answer placeholder='Security Question Answer'>
+          <input  hidden  id=password                 type=password name=password                 placeholder='Choose New Password'>
+          <input  hidden  id=pass_verify              type=password name=pass_verify              placeholder='Confirm New Password'>
+          <input  hidden  id=submit-reset             type=submit   name=submit-reset             value='Reset Password' on>  
         </form>
       </div>
     </div>
