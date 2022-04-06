@@ -1,3 +1,18 @@
+// TODO(AD) - fix indentation
+
+$(() => {
+  $('#logout-link').on('click', (e) => {
+    e.preventDefault();
+
+    // end all intervals
+    const maxIntervalId = window.setInterval(() => {}, Number.MAX_SAFE_INTEGER);
+    for (let i = 1; i < maxIntervalId; i++) {
+      window.clearInterval(i);
+    }
+    window.location.replace('/api/logout');
+  });
+})
+
 function hideById() {
   for (let i = 0; i < arguments.length; i++) {
     $(`#${arguments[i]}`).attr('hidden', 'true');
@@ -13,15 +28,15 @@ function showById() {
 function checkUsername() {
   const usernameInput = $('#username');
   if (!usernameRegex.test(usernameInput.val())) {
-      usernameInput[0].setCustomValidity(
-          'Username must be between 8 and 20 characters long and contain only numbers and/or letters.'
-      );
-      usernameInput[0].reportValidity();
-      return false;
+    usernameInput[0].setCustomValidity(
+      'Username must be between 8 and 20 characters long and contain only numbers and/or letters.'
+    );
+    usernameInput[0].reportValidity();
+    return false;
   } else {
-      usernameInput[0].setCustomValidity('');
-      usernameInput[0].reportValidity();
-      return true;
+    usernameInput[0].setCustomValidity('');
+    usernameInput[0].reportValidity();
+    return true;
   }
 }
 
@@ -56,32 +71,99 @@ function checkPassVerify() {
   }
 }
 
-function checkSecurityQuestion() {
-  const securityQuestionInput = $('#security_question_id');
-  if (securityQuestionInput.val() === '0') {
-      securityQuestionInput[0].setCustomValidity(
-          'You must select a security question.'
-      );
-      securityQuestionInput[0].reportValidity();
-      return false;
-  } else {
-      securityQuestionInput[0].setCustomValidity('');
-      securityQuestionInput[0].reportValidity();
-      return true;
+function checkSelection(selector, message) {
+  const selectionInput = $(`${selector}`);
+  if (selectionInput.val() === '0') {
+    selectionInput[0].setCustomValidity(message);
+    selectionInput[0].reportValidity();
+    return false;
   }
+  selectionInput[0].setCustomValidity('');
+  selectionInput[0].reportValidity();
+  return true;
+}
+
+function checkSecurityQuestion() {
+  return checkSelection(
+    '#security_question_id', 
+    'You must select a security question.',
+  );
+}
+
+function checkNumPassengers() {
+  return checkSelection(
+    '#num_passengers',
+    'You must select the number of passengers in your reservation.',
+  );
 }
 
 function checkSecurityQuestionAnswer() {
   const securityQuestionAnswerInput = $('#security_question_answer');
   if (!securityQuestionAnswerRegex.test(securityQuestionAnswerInput.val())) {
-      securityQuestionAnswerInput[0].setCustomValidity(
-          'Security question answer must be between 1 and 99 characters.'
-      );
-      securityQuestionAnswerInput[0].reportValidity();
-      return false;
-  } else {
-      securityQuestionAnswerInput[0].setCustomValidity('');
-      securityQuestionAnswerInput[0].reportValidity();
-      return true;
+    securityQuestionAnswerInput[0].setCustomValidity(
+      'Security question answer must be between 1 and 99 characters.'
+    );
+    securityQuestionAnswerInput[0].reportValidity();
+    return false;
   }
+  securityQuestionAnswerInput[0].setCustomValidity('');
+  securityQuestionAnswerInput[0].reportValidity();
+  return true;
+}
+
+function checkTripDate() {
+  if ($('#trip_date').val() === '') {
+    $('#trip_date')[0].setCustomValidity('You must select a trip date.');
+    $('#trip_date')[0].reportValidity();
+    return false;
+  }
+  $('#trip_date')[0].setCustomValidity('');
+  $('#trip_date')[0].reportValidity();
+  return true;
+}
+
+function checkUserLoggedIn() {
+  return new Promise((resolve, reject) => {
+    let xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', '/api/login');
+    xmlHttp.onload = () => {
+      if (xmlHttp.status == 200) {
+        resolve(true);
+      } else if (xmlHttp.status == 400) {
+        resolve(false);
+      } else {
+        reject({
+          message: 'Unknown response status code.',
+          code: xmlHttp.status,
+        });
+      }
+    };
+    xmlHttp.onerror = () => {
+      reject({
+        message: 'Unexpected response from the server.',
+        response: xmlHttp.responseText,
+      });
+    };
+    xmlHttp.send();
+  });
+}
+
+// redirect the user to the home page if they are logged in
+async function redirectOnLogin() {
+  // check login every 5 sec and redirect to home
+	// page is user becomes logged in
+	window.setInterval(async () => {
+		let loggedIn;
+		try {
+			loggedIn = await checkUserLoggedIn();
+		} catch (err) {
+			// TODO(AD) - need to do something better here
+			console.log(err);
+			return;
+		}
+		// if user becomes logged out, redirect to login page
+		if (loggedIn) {
+			window.location.replace('/');
+		}
+	}, 2500);
 }

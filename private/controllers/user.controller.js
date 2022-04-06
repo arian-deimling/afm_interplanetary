@@ -285,7 +285,8 @@ const findUser = async (req, res) => {
   let questionQueryResult;
   try {
     questionQueryResult = await SecurityQuestion.findAll({
-      where: { id: usersQueryResult[0].dataValues.security_question_id },
+      where: { '$users.username$': clientCredentials.username },
+      include: [User],
     });
   } catch (err) {
     console.log(err.message);

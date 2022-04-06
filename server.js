@@ -34,6 +34,7 @@ app.use(session({
 // api routes
 require('./private/routes/security_questions.routes')(app);
 require('./private/routes/user.routes')(app);
+require('./private/routes/reservation.routes')(app);
 
 // serves static files
 app.use(express.static(path.join(__dirname, '/public/static')));
@@ -45,6 +46,7 @@ app.get('/signup.html', (_, res) => res.redirect('/signup'));
 app.get('/login.html', (_, res) => res.redirect('/login'));
 app.get('/reset.html', (_, res) => res.redirect('/reset'));
 app.get('/reservation.html', (_, res) => res.redirect('/reservation'));
+// app.get('/reservation/view.html', (_, res) => res.redirect('/reservation/view'));
 
 // serve pages
 app.get('/', (req, res) => {
@@ -85,6 +87,14 @@ app.get('/reservation', (req, res) => {
     }
     res.render('reservation');
 });
+// app.get('/reservation/view', (req, res) => {
+//     // if the user is not logged in, redirect them to the home page
+//     if (!req.session.userID) {
+//         res.redirect('/');
+//         return;
+//     }
+//     res.render('viewreservation');
+// })
 
 app.listen(PORT, () =>{
     console.log(`Example app listening on port ${PORT}`);

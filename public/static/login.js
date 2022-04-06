@@ -2,7 +2,10 @@
 
 $(() => {
 
-	hideById('reservation-link', 'login-link', 'logout-link');
+	showById('home-link', 'about-link', 'signup-link');
+
+	// redirect the user if the user becomes logged in while viewing the page
+	redirectOnLogin();
 
   $('#username').on('keyup', () => {
     $('#username')[0].setCustomValidity('');

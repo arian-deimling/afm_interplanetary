@@ -2,7 +2,7 @@
 
 $(() => {
 
-	hideById('reservation-link', 'logout-link');
+	showById('home-link', 'about-link', 'signup-link', 'login-link')
 
 	// validate password and password verify upon each keypress
 	$('#password').on('keyup', () => {
@@ -24,7 +24,6 @@ $(() => {
 
 	$('form').on('submit', (event) => {
 		event.preventDefault();
-		console.log
 
 		// if we are at the stage of retrieving the security question for this user
 		if (!($('#submit-user').attr('hidden'))) {

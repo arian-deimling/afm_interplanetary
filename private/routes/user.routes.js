@@ -23,6 +23,7 @@ const userRoutes = app => {
   // update a user's password
   router.post('/reset', user_controller.resetPassword);
 
+  // TODO(AD) - base URL should be different for each `routes` file
   app.use('/api', router);
 };
 

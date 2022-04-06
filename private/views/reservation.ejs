@@ -21,6 +21,11 @@
           <h2 class=no-margin-top>New Reservation</h2>
 
           <!-- form fields -->
+          <input type=text id=trip_date name=trip_date placeholder='Select Trip Date'>
+          <div class=flex-rows>
+            <select hidden class=center id=num_passengers name=num_passengers><option value=0>Select Number of Passengers</option></select>
+            <label hidden for=num_passengers>passenger(s)</label>
+          </div>
           <!-- <input id=username type=text name=username placeholder=Username>
           <input id=password type=password name=password placeholder='Choose Password'>
           <input id=pass_verify type=password name=pass_verify placeholder='Confirm Password'>

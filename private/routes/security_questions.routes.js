@@ -6,6 +6,7 @@ const securityQuestionRoutes = app => {
   // get all security questions
   router.get('/security_questions', security_question_control.getQuestions);
 
+  // TODO(AD) - base URL should be different for each `routes` file
   app.use('/api', router);
 };
 
