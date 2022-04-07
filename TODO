@@ -4,4 +4,4 @@ AD - make <select> tags display current value in gray until a valid one is selec
 MP - change favicon to Moon
 
 LINE_COUNT:
-cat <(find private public -type f -not -name '*.jpg')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 
+cat <(find private public -type f -not -name '*.jpg' -not -path '*/lib/*')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 
