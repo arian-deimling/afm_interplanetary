@@ -10,6 +10,8 @@ const reservationRoutes = app => {
 
   router.post('/create', reservationController.create);
 
+  router.get('/', reservationController.allReservations);
+
   app.use('/api/reservation', router);
 };
 

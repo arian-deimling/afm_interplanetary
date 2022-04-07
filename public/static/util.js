@@ -13,6 +13,25 @@ $(() => {
   });
 })
 
+function loginCheck() {
+  window.setInterval(async () => {
+    let loggedIn;
+    try {
+      loggedIn = await checkUserLoggedIn();
+    } catch (err) {
+      // TODO(AD) - need to do something better here
+      console.log(err);
+      return;
+    }
+    // if user becomes logged out, redirect to login page
+    if (!loggedIn) {
+      clearInterval(loginCheck);
+      alert('Your session has expired. Please log in again to continue!');
+      window.location.replace('/login');
+    }
+  }, 2500);
+}
+
 function hideById() {
   for (let i = 0; i < arguments.length; i++) {
     $(`#${arguments[i]}`).attr('hidden', 'true');

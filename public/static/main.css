@@ -32,7 +32,7 @@ form {
     width: 50%;
 }
 
-label {
+label, table, th, td {
     color: black;
 }
 
@@ -108,6 +108,10 @@ form select:disabled {
 
 .no-margin-top {
     margin-top: 0;
+}
+
+.black-text {
+    color: black;
 }
 
 #main {

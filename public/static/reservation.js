@@ -31,32 +31,22 @@ async function getAndShowCapacity() {
 		showById('num_passengers');
 	})
 	.fail((res) => {
+		if (res.status === 400) {
+			$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
+			$(`#${res.responseJSON.what}`)[0].reportValidity();
+			return;
+		}
 		console.log(res.responseText);
 	});
 }
 
 $(() => {
 
-	showById('home-link', 'about-link', 'logout-link');
+	showById('home-link', 'about-link', 'logout-link', 'reservation-view-link');
 
 	// check login every 5 sec and redirect to login
 	// page is user becomes logged out
-	const loginCheck = window.setInterval(async () => {
-		let loggedIn;
-		try {
-			loggedIn = await checkUserLoggedIn();
-		} catch (err) {
-			// TODO(AD) - need to do something better here
-			console.log(err);
-			return;
-		}
-		// if user becomes logged out, redirect to login page
-		if (!loggedIn) {
-			clearInterval(loginCheck);
-			alert('Your session has expired. Please log in again to continue!');
-			window.location.replace('/login');
-		}
-	}, 2500);
+	loginCheck();
 
 	// force user to select date from calendar instead of keyboard
 	$('#trip_date').on('keydown', (e) => {

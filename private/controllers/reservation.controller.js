@@ -1,3 +1,4 @@
+const { ResultWithContext } = require('express-validator/src/chain');
 const { trip } = require('../models');
 const db = require('../models');
 
@@ -55,6 +56,7 @@ async function _getRemainingCapacity(date) {
   return { remainingCapacity: tripCapacity - spotsTaken };
 }
 
+// TODO(AD) - exclude trips that are full
 const getTripDates = async (_, res) => {
   // get all trip dates from the db
   let tripDatesQueryResult;
@@ -175,10 +177,33 @@ const create = async (req, res) => {
   res.sendStatus(200);
 }
 
+const allReservations = async (req, res) => {
+
+  spotsTaken = await Reservation.findAll({
+    where: { user_id: req.session.userID },
+    include: [Trip],
+  });
+
+  res.status(200).send(spotsTaken.map(x => {
+    return {
+      id: x.dataValues.id,
+      num_passengers: x.dataValues.num_passengers,
+      createdAt: x.dataValues.createdAt,
+      updatedAt: x.dataValues.updatedAt,
+      trip_date: x.dataValues.trip.dataValues.date,
+    };
+  }));
+  return;
+
+  console.log(spotsTaken);
+  res.sendStatus(200);
+}
+
 reservationController = {
   getTripDates: getTripDates,
   getRemainingCapacity: getRemainingCapacity,
   create: create,
+  allReservations: allReservations,
 }
 
 module.exports = reservationController;
