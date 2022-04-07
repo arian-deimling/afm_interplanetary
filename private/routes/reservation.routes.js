@@ -12,6 +12,8 @@ const reservationRoutes = app => {
 
   router.get('/', reservationController.allReservations);
 
+  router.post('/delete', reservationController.deleteReservation);
+
   app.use('/api/reservation', router);
 };
 

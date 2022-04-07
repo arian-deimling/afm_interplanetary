@@ -12,6 +12,15 @@ function parseDateLocalTime(_date) {
   return date;
 }
 
+function deleteButton(anchor) {
+  $.post('/api/reservation/delete', {id: anchor.attr('value')}, (res) => {
+    anchor.parent().parent().attr('hidden', '');
+  })
+  .fail((res) => {
+    console.log(res);
+  });
+}
+
 $(() => {
 
   $('form').css('width', '75%');
@@ -53,8 +62,12 @@ $(() => {
           row.append($('<td>').html(new Date(createdAt).toLocaleString('en-US', dateTimeFormat).replace(', ', '<br>')));
           row.append($('<td>').html(new Date(updatedAt).toLocaleString('en-US', dateTimeFormat).replace(', ', '<br>')));
           row.append($('<td>').append($('<a>').attr('href', `/reservation?date=${trip_date}`).html('Edit')));
-          // TODO(AD) - implement delete
-          row.append($('<td>').append($('<a>').attr('value', `${trip_date}`).attr('href', '').html('Delete')));
+          const link = $('<a>').attr('value', `${id}`).attr('href', '').html('Delete');
+          link.on('click', (e) => {
+            e.preventDefault();
+            deleteButton(link);
+          });
+          row.append($('<td>').append(link));
           $('#reservation_display').append(row);
         }
         // display the reservation table

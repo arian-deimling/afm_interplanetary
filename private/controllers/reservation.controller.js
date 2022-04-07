@@ -274,9 +274,32 @@ const allReservations = async (req, res) => {
       trip_date: x.dataValues.trip.dataValues.date,
     };
   }));
-  return;
+}
 
-  console.log(spotsTaken);
+const deleteReservation = async (req, res) => {
+
+  // make sure a reservation identifier was provided
+  if (!req.body.id) {
+    res.status(400).send({
+      what: 'trip_date',
+      message: 'Trip date is required.',
+    });
+    return;
+  }
+
+  // delete the reservation
+  try {
+    await Reservation.destroy({
+      where: {
+        id: req.body.id,
+      },
+    })
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+    return;
+  }
+  
   res.sendStatus(200);
 }
 
@@ -285,6 +308,7 @@ reservationController = {
   getRemainingCapacity: getRemainingCapacity,
   create: create,
   allReservations: allReservations,
+  deleteReservation: deleteReservation,
 }
 
 module.exports = reservationController;
