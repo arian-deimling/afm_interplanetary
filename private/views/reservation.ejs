@@ -19,9 +19,12 @@
 
           <!-- form header -->
           <h2 class=no-margin-top>New Reservation</h2>
-
+          
           <!-- form fields -->
           <input type=text id=trip_date name=trip_date placeholder='Select Trip Date'>
+          <div hidden id=editing_msg style='color: darkgoldenrod'>
+            You are editing an existing reservation.
+          </div>
           <div class=flex-rows>
             <select hidden class=center id=num_passengers name=num_passengers><option value=0>Select Number of Passengers</option></select>
             <label hidden for=num_passengers>passenger(s)</label>

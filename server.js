@@ -14,7 +14,7 @@ const PORT = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(minify());
+// app.use(minify());
 
 app.set('views', './private/views');
 app.set('view engine', 'ejs');

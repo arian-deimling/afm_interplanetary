@@ -8,7 +8,7 @@ function parseDateLocalTime(dateString) {
 function makeAvailability(dates) {
 	// convert available dates to map
 	const availableDates = dates;
-	const datesKeyVal = availableDates.map(({ date }) => [date, true]);
+	const datesKeyVal = availableDates.map(date => [date, true]);
 	const datesMap = new Map(datesKeyVal);
 
 	// return fuction that returns true if date key in the map is truthy
@@ -21,12 +21,42 @@ function makeAvailability(dates) {
 	}
 }
 
+function handlePassengerSelectChange() {
+	$('#num_passengers').css('flex', '1 1 auto');
+	// if number of passengers is selected display label
+	if ($('#num_passengers').val() == '0') {
+		$('label[for=num_passengers]').attr('hidden', 'true');
+	} else {
+		$('label[for=num_passengers]').removeAttr('hidden');
+	}
+}
+
 async function getAndShowCapacity() {
 	$.post('/api/reservation/capacity', $('form').serialize(), (res) => {
+		// calculate total number of seats user can select
+		const capacity = res.remaining_capacity + res.currentReservedSeats;
+
+		// empty the passenger selection element and add a default value
 		$('#num_passengers').empty();
 		$('#num_passengers').append($('<option>').prop('value', '0').html('Select Number of Passengers'));
-		for (let i = 1; i <= res.remaining_capacity; i++) {
+
+		// add number of passenger selection options
+		for (let i = 1; i <= capacity; i++) {
 			$('#num_passengers').append($('<option>').prop('value', `${i}`).html(`${i}`));
+		}
+
+		// if the user already has a reservation for this trip
+		if (res.currentReservedSeats !== 0) {
+			// set the selection value to current number of passengers for the user
+			$(`option[value=${res.currentReservedSeats}]`).attr('selected', true);
+			handlePassengerSelectChange();
+			showById('editing_msg');
+			$('h2').html('Edit Reservation');
+			$(':submit').attr('value', 'Modify');
+		} else {
+			$('h2').html('New Reservation');
+			$(':submit').attr('value', 'Submit');
+			hideById('editing_msg');
 		}
 		showById('num_passengers');
 	})
@@ -41,6 +71,16 @@ async function getAndShowCapacity() {
 }
 
 $(() => {
+
+	// if a reservation was selected via query params autofill date
+	// and disable date selection
+	const queryParams = new URLSearchParams(window.location.search);
+	const date = queryParams.get('date');
+	if (date !== null) {
+		$('#trip_date').val(`${date.split('-')[1]}/${date.split('-')[2]}/${date.split('-')[0]}`);
+		getAndShowCapacity();
+		// $('#trip_date').attr('disabled', '');
+	}
 
 	showById('home-link', 'about-link', 'logout-link', 'reservation-view-link');
 
@@ -63,13 +103,7 @@ $(() => {
 	// validate num_passengers selection on field change
 	$('#num_passengers').on('change', () => {
 		checkNumPassengers();
-		$('#num_passengers').css('flex', '1 1 auto');
-		// if number of passengers is selected display label
-		if ($('#num_passengers').val() == '0') {
-			$('label[for=num_passengers]').attr('hidden', 'true');
-		} else {
-			$('label[for=num_passengers]').removeAttr('hidden');
-		}
+		handlePassengerSelectChange();
 	});
 
 	$('form').on('submit', (e) => {
@@ -109,17 +143,18 @@ $(() => {
   xmlHttp.onreadystatechange = () => {
 		if (xmlHttp.readyState == 4) {
 			if (xmlHttp.status === 200) {
+				console.log(xmlHttp.response);
 				// create a function that returns true when available date is passed to
 				// it; sort the list of dates
 				const available = makeAvailability(xmlHttp.response);
-				xmlHttp.response.sort((a, b) => { return a.date.localeCompare(b.date); });
+				xmlHttp.response.sort((a, b) => { return a.localeCompare(b); });
 
 				// get the oldest and newest dates
 				let minDate;
 				let maxDate;
 				if (xmlHttp.response.length > 0) {
-					minDate = xmlHttp.response.slice(0, 1)[0].date;
-					maxDate = xmlHttp.response.slice(-1)[0].date;
+					minDate = xmlHttp.response.slice(0, 1)[0];
+					maxDate = xmlHttp.response.slice(-1)[0];
 
 					// ['YYYY', 'MM', 'DD']
 					const minDateSplit = minDate.split('-');

@@ -1,4 +1,4 @@
-const { ResultWithContext } = require('express-validator/src/chain');
+const sequelize = require('sequelize');
 const { trip } = require('../models');
 const db = require('../models');
 
@@ -57,21 +57,52 @@ async function _getRemainingCapacity(date) {
 }
 
 // TODO(AD) - exclude trips that are full
-const getTripDates = async (_, res) => {
-  // get all trip dates from the db
-  let tripDatesQueryResult;
-  try {
-    tripDatesQueryResult = await Trip.findAll({
-      attributes: ['date'],
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.sendStatus(500);
-    return;
-  }
+const getTripDates = async (req, res) => {
 
-  // send the trip dates to the client
-  res.status(200).send(tripDatesQueryResult);
+ // get all trip dates from the db
+ let tripDatesQueryResult;
+ try {
+   tripDatesQueryResult = await Trip.findAll({
+     attributes: ['id', 'date', 'capacity'],
+   });
+ } catch (err) {
+   console.log(err.message);
+   res.sendStatus(500);
+   return;
+ }
+ // get number of passengers already assigned to each trip
+ let tripPassengersQueryResult;
+ try {
+   tripPassengersQueryResult = await Reservation.findAll({
+     where: { user_id: {[sequelize.Op.not]: req.session.userID }},
+     attributes: [
+       'trip_id',
+       [sequelize.fn('sum', sequelize.col('num_passengers')), 'trip_passengers']
+     ],
+     group: ['trip_id'],
+   });
+ } catch (err) {
+   console.log(err);
+   res.sendStatus(500);
+   return;
+ }
+ // create a map that maps trip dates to remaining capacity
+ let tripCapacities = {};
+ tripDatesQueryResult.map(x => {
+   tripCapacities[x.dataValues.id] = [x.dataValues.capacity, x.dataValues.date];
+ });
+
+ // adjust remaining capacity for number of passengers already assigned to trip
+ for (const trip of tripPassengersQueryResult) {
+   tripCapacities[trip.dataValues.trip_id][0] -= trip.dataValues.trip_passengers
+ }
+
+ // extract dates that have more than 0 remaining seats
+ const validDates = Object.values(tripCapacities).filter(x => x[0] !== 0).map(x => x[1]);
+
+ // send the trip dates to the client
+ res.status(200).send(validDates);
+
 };
 
 const getRemainingCapacity = async (req, res) => {
@@ -90,8 +121,30 @@ const getRemainingCapacity = async (req, res) => {
     res.status(400).send(capacityResult);
     return;
   }
+
+  // check whether the user currently has a reservation on the selected trip
+  let existingReservationQueryResult;
+  try {
+    existingReservationQueryResult = await Reservation.findAll({
+      where: { user_id: req.session.userID },
+      include: [{
+        model: Trip,
+        where: { date: new Date(req.body.trip_date) },
+      }]
+    });
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+    return;
+  }
+  // store the number of seats the user has reserved for the selected trip
+  let currentReservedSeats = 0;
+  if (existingReservationQueryResult.length !== 0) {
+    currentReservedSeats = existingReservationQueryResult[0].dataValues.num_passengers;
+  }
+
   // if there are no more remaining seats, send error
-  if (capacityResult.remainingCapacity === 0) {
+  if (currentReservedSeats === 0 && capacityResult.remainingCapacity === 0) {
     res.status(400).send({
       what: 'trip_date',
       message: 'This trip is at capacity. Please select a different trip date.',
@@ -101,6 +154,7 @@ const getRemainingCapacity = async (req, res) => {
   // send remaining capacity
   res.status(200).send({
     remaining_capacity: capacityResult.remainingCapacity,
+    currentReservedSeats: currentReservedSeats,
   });
 }
 
@@ -139,8 +193,30 @@ const create = async (req, res) => {
     return;
   }
 
+  // check whether the user currently has a reservation on the selected trip
+  let existingReservationQueryResult;
+  try {
+    existingReservationQueryResult = await Reservation.findOne({
+      where: { user_id: req.session.userID },
+      include: [{
+        model: Trip,
+        where: { date: new Date(req.body.trip_date) },
+      }]
+    });
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+    return;
+  }
+
+  // store the number of seats the user has reserved for the selected trip
+  let currentReservedSeats = 0;
+  if (existingReservationQueryResult) {
+    currentReservedSeats = existingReservationQueryResult.dataValues.num_passengers;
+  }
+
   // if there are not enough seats 
-  if (capacityResult.remainingCapacity < reservationInfo.num_passengers) {
+  if (capacityResult.remainingCapacity + currentReservedSeats < reservationInfo.num_passengers) {
     res.status(400).send({
       what: 'trip_date',
       message: 'The number of passengers exceeds the remaining capacity for this trip.',
@@ -161,19 +237,24 @@ const create = async (req, res) => {
   }
   const tripId = tripQueryResult[0].dataValues.id;
 
-  // create the reservation
+  // create or update the reservation
   try {
-    await Reservation.create({
-      num_passengers: reservationInfo.num_passengers,
-      trip_id: tripId,
-      user_id: req.session.userID,
-    });
+    if (existingReservationQueryResult) {
+      await existingReservationQueryResult.update({
+        num_passengers: reservationInfo.num_passengers,
+      });
+    } else {
+      await Reservation.create({
+        num_passengers: reservationInfo.num_passengers,
+        trip_id: tripId,
+        user_id: req.session.userID,
+      });
+    }
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
-    return;
   }
-  
+
   res.sendStatus(200);
 }
 

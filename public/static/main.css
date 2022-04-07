@@ -36,6 +36,10 @@ label, table, th, td {
     color: black;
 }
 
+table {
+    border-spacing: 2px 1rem;
+}
+
 form input, select, label {
     font-size: 1.5rem;
     padding: 1rem;
