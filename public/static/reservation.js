@@ -1,10 +1,5 @@
 'use strict';
 
-function parseDateLocalTime(dateString) {
-	// TODO(AD) - fix hardcoded
-	return new Date(`${dateString}T00:00:00.000-04:00`);
-}
-
 function makeAvailability(dates) {
 	// convert available dates to map
 	const availableDates = dates;
@@ -78,8 +73,8 @@ $(() => {
 	const date = queryParams.get('date');
 	if (date !== null) {
 		$('#trip_date').val(`${date.split('-')[1]}/${date.split('-')[2]}/${date.split('-')[0]}`);
+		$('#trip_date').attr('readonly', 'readonly');
 		getAndShowCapacity();
-		// $('#trip_date').attr('disabled', '');
 	}
 
 	showById('home-link', 'about-link', 'logout-link', 'reservation-view-link');
@@ -164,15 +159,17 @@ $(() => {
 					minDate = `${minDateSplit[1]}/${minDateSplit[2]}/${minDateSplit[0]}`;
 					maxDate = `${maxDateSplit[1]}/${maxDateSplit[2]}/${maxDateSplit[0]}`;
 				}
-				// set ip date picker
-				$('#trip_date').datepicker({
-					beforeShowDay: available,
-					minDate: minDate,
-					maxDate: maxDate,
-					onSelect: _ => {
-						getAndShowCapacity();
-					},
-				});
+				// set up date picker unless we are editing a specific reservation
+				if (date === null) {
+					$('#trip_date').datepicker({
+						beforeShowDay: available,
+						minDate: minDate,
+						maxDate: maxDate,
+						onSelect: _ => {
+							getAndShowCapacity();
+						},
+					});
+				}
 
 			}
 		}

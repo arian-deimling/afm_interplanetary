@@ -1,3 +1,5 @@
+'use strict';
+
 // TODO(AD) - fix indentation
 
 $(() => {
@@ -12,6 +14,19 @@ $(() => {
     window.location.replace('/api/logout');
   });
 })
+
+const locale = window.navigator.userLanguage || window.navigator.language;
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+function parseDateLocalTimezone(date) {
+  date = new Date(date);
+  let utcDate = new Date(date.toLocaleString(locale, { timeZone: 'UTC' }));
+  let tzDate = new Date(date.toLocaleString(locale, { timeZone: timezone }));
+  let offset = utcDate.getTime() - tzDate.getTime();
+
+  date.setTime(date.getTime() + offset);
+  return date;
+}
 
 function loginCheck() {
   window.setInterval(async () => {

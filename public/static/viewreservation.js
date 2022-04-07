@@ -1,17 +1,5 @@
 'use strict';
 
-function parseDateLocalTime(_date) {
-  // TODO(AD) - _date is a bad param name
-  let date = new Date(_date);
-  let utcDate = new Date(date.toLocaleString('en-US', { timeZone: "UTC" }));
-  let tzDate = new Date(date.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
-  let offset = utcDate.getTime() - tzDate.getTime();
-
-  date.setTime( date.getTime() + offset );
-
-  return date;
-}
-
 function deleteButton(anchor) {
   $.post('/api/reservation/delete', {id: anchor.attr('value')}, (res) => {
     anchor.parent().parent().attr('hidden', '');
@@ -23,7 +11,7 @@ function deleteButton(anchor) {
 
 $(() => {
 
-  $('form').css('width', '75%');
+  $('form').css('width', '80%');
 
 	showById('home-link', 'about-link', 'logout-link', 'reservation-link');
   loginCheck();
@@ -57,17 +45,24 @@ $(() => {
         // add a row to the table for each reservation
         for (const { id, num_passengers, createdAt, updatedAt, trip_date } of userTrips) {
           const row = $('<tr>')
-          row.append($('<td>').html(parseDateLocalTime(trip_date).toLocaleDateString('en-US', dateFormat)));
+          // add column data to this row of the table
+          row.append($('<td>').html(parseDateLocalTimezone(trip_date).toLocaleDateString('en-US', dateFormat)));
           row.append($('<td>').html(num_passengers));
           row.append($('<td>').html(new Date(createdAt).toLocaleString('en-US', dateTimeFormat).replace(', ', '<br>')));
           row.append($('<td>').html(new Date(updatedAt).toLocaleString('en-US', dateTimeFormat).replace(', ', '<br>')));
+
+          // create a link to edit this reservation
           row.append($('<td>').append($('<a>').attr('href', `/reservation?date=${trip_date}`).html('Edit')));
+
+          // create an entry to delete this reservation
           const link = $('<a>').attr('value', `${id}`).attr('href', '').html('Delete');
           link.on('click', (e) => {
             e.preventDefault();
             deleteButton(link);
           });
           row.append($('<td>').append(link));
+
+          // add the row to the table
           $('#reservation_display').append(row);
         }
         // display the reservation table
