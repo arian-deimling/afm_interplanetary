@@ -5,6 +5,7 @@ Any - change favicon to Moon
 Any - update about page text
 Any - update Interface Document w/ events that prompt the website to do something
 Any - remove all client-side console.log()
+Any - add 'use strict'; to all js code
 
 LINE_COUNT:
 cat <(find private public -type f -not -name '*.jpg' -not -path '*/lib/*')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 

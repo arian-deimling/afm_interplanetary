@@ -1,10 +1,8 @@
 const sequelize = require('sequelize');
-const { trip } = require('../models');
 const db = require('../models');
 
 const Trip = db.trip;
 const Reservation = db.reservation;
-const User = db.user;
 const Seat = db.seat;
 
 async function _getRemainingCapacity(date) {

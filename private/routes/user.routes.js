@@ -1,5 +1,3 @@
-const { route } = require('express/lib/application');
-
 const userRoutes = app => {
 
   const user_controller = require('../controllers/user.controller');
