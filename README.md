@@ -4,18 +4,29 @@
 
 ### mysql
 
-Open the mysql command-line interface and enter the following commands:
-1. `CREATE USER 'assignment4'@'localhost' IDENTIFIED BY '1234567890';`
-2. `CREATE DATABASE afm_interplanetary;`
-3. `USE afm_interplanetary;`
-4. `GRANT ALL PRIVILEGES ON afm_interplanetary.* TO 'assignment4'@'localhost';`
+1. Download mysql from [`https://dev.mysql.com/downloads/mysql/`](https://dev.mysql.com/downloads/mysql/).
+2. Open the mysql command-line interface:
+   * `mysql -u root -p`
+3. Enter the root password when prompted.
+4. Create a new user:
+   * `CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';`
+5. Grant privileges to the new user:
+   * `GRANT ALL PRIVILEGES ON afm_interplanetary.* TO '<username>'@'localhost';`
+6. Exit the mysql command-line interface.
+7. Run the setup SQL commands:
+   * `mysql -u <username> -p < setup.sql`
+8. Enter the password you just created when prompted. 
 
 ### npm
 
-Navigate to the root project directory (the directory that this file is in) in a shell and enter the following commands:
-1. `npm install`
-2. `npm start`
+1. Download Node.js from [`https://nodejs.org/en/download/`](https://nodejs.org/en/download/).
+2. Open a terminal in the project directory (the directory this README is in).
+3. Install the required packages:
+   * `npm install`
+4. Start the server:
+   * `npm start`
 
+<!-- 
 ## Usage
 
 ### Home Page
@@ -54,4 +65,4 @@ Navigate to the root project directory (the directory that this file is in) in a
 3. Answer your security question and enter a new password.
 4. Click the `Reset Password` button.
    * If any error messages appear, correct them and click the `Reset Password` button again.
-5. You will automatically be redirected to the `Login` page where you can log in with your new credentials.
+5. You will automatically be redirected to the `Login` page where you can log in with your new credentials. -->
