@@ -7,18 +7,30 @@ $(() => {
 	// redirect the user if the user becomes logged in while viewing the page
 	redirectOnLogin();
 
-  $('#username').on('keyup', () => {
+  $('#username').on('keyup', (e) => {
+		if (e.key === 'Enter') {
+			$('form').trigger('submit');
+			return;
+		}
     $('#username')[0].setCustomValidity('');
     $('#username')[0].reportValidity();
   });
 
-  $('#password').on('keyup', () => {
+  $('#password').on('keyup', (e) => {
+		if (e.key === 'Enter') {
+			$('form').trigger('submit');
+			return;
+		}
     $('#password')[0].setCustomValidity('');
     $('#password')[0].reportValidity();
   });
 
 	$('form').on('submit', (event) => {
 		event.preventDefault();
+
+		if (!checkUsernameExists() || !checkPasswordExists) {
+			return;
+		}
 		
 		$.post('/api/login', $('form').serialize(), (res) => {
 			// on success response, redirect to login page

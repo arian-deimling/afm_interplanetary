@@ -337,7 +337,7 @@ const create = async (req, res) => {
 
 const allReservations = async (req, res) => {
 
-  spotsTaken = await Reservation.findAll({
+  let spotsTaken = await Reservation.findAll({
     where: { user_id: req.session.userID },
     include: [Trip],
   });

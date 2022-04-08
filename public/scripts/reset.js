@@ -15,13 +15,17 @@ $(() => {
 	});
 
 	// unset validity if username or security question answer are changed
-  $('#username').on('keyup', () => {
-    $('#username')[0].setCustomValidity('');
-    $('#username')[0].reportValidity();
+  $('#username').on('keyup', (e) => {
+		if (e.key !== 'Enter') {
+			$('#username')[0].setCustomValidity('');
+			$('#username')[0].reportValidity();
+		}
   });
-	$('#security_question_answer').on('keyup', () => {
-		$('#security_question_answer')[0].setCustomValidity('');
-		$('#security_question_answer')[0].reportValidity();
+	$('#security_question_answer').on('keyup', (e) => {
+		if (e.key !== 'Enter') {
+			$('#security_question_answer')[0].setCustomValidity('');
+			$('#security_question_answer')[0].reportValidity();
+		}
 	});
 
 	$('form').on('submit', (event) => {
@@ -29,7 +33,11 @@ $(() => {
 
 		// if we are at the stage of retrieving the security question for this user
 		if (!($('#submit-user').attr('hidden'))) {
-			
+
+			if (!checkUsernameExists()) {
+				return;
+			}	
+					
 			// find the user
 			$.post('/api/finduser', $('form').serialize(), res => {
 
@@ -48,6 +56,7 @@ $(() => {
 
 			})
 			.fail(res => {
+				console.log(res.responseJSON);
 				$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
 				$(`#${res.responseJSON.what}`)[0].reportValidity();
 			});
@@ -56,7 +65,9 @@ $(() => {
 		// if we are at the stage of resetting the password for this user		
 		if (!($('#submit-reset').attr('hidden'))) {
 
-			if (!(checkPassword() && checkPassVerify())) {
+			if (!checkUsernameExists() || !checkSecurityQuestionAnswerExists()
+					|| !checkPassword() || !checkPassVerify()) {
+
 				return;
 			}	
 
@@ -65,6 +76,7 @@ $(() => {
 				window.location.replace('/login');
 			})
 			.fail((res, status, err) => {
+				console.log('fail lower: ' + String(res));
 				$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
 				$(`#${res.responseJSON.what}`)[0].reportValidity();
 			});

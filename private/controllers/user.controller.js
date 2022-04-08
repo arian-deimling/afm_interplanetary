@@ -250,7 +250,7 @@ const logout = async (req, res) => {
 // controller to find user security question to assist with password reset
 const findUser = async (req, res) => {
 
-  clientCredentials = req.body;
+  let clientCredentials = req.body;
 
   // validate username from client
   if (!clientCredentials.username) {

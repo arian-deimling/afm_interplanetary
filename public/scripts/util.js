@@ -213,3 +213,48 @@ async function redirectOnLogin() {
 		}
 	}, 2500);
 }
+
+function checkUsernameExists() {
+  const usernameInput = $('#username');
+  if (usernameInput.val().length === 0) {
+    usernameInput[0].setCustomValidity(
+      'Username is required.'
+    );
+    usernameInput[0].reportValidity();
+    return false;
+  } else {
+    usernameInput[0].setCustomValidity('');
+    usernameInput[0].reportValidity();
+    return true;
+  }
+}
+
+function checkPasswordExists() {
+  const passwordInput = $('#password');
+  if (passwordInput.val().length === 0) {
+      passwordInput[0].setCustomValidity(
+          'Password is required.'
+      );
+      passwordInput[0].reportValidity();
+      return false;
+  } else {
+      passwordInput[0].setCustomValidity('');
+      passwordInput[0].reportValidity();
+      return true;
+  }
+}
+
+function checkSecurityQuestionAnswerExists() {
+  const answerInput = $('#security_question_answer');
+  if (answerInput.val().length === 0) {
+      answerInput[0].setCustomValidity(
+          'Security question answer is required.'
+      );
+      answerInput[0].reportValidity();
+      return false;
+  } else {
+      answerInput[0].setCustomValidity('');
+      answerInput[0].reportValidity();
+      return true;
+  }
+}
