@@ -283,6 +283,10 @@ $(() => {
 					minDate = xmlHttp.response.slice(0, 1)[0];
 					maxDate = xmlHttp.response.slice(-1)[0];
 
+					// min date is the later of today or actual min date
+					minDate = new Date() - new Date(minDate) > 0 ?
+						new Date().toISOString().split('T')[0] : minDate;
+
 					// ['YYYY', 'MM', 'DD']
 					const minDateSplit = minDate.split('-');
 					const maxDateSplit = maxDate.split('-');

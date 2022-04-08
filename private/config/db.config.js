@@ -4,8 +4,8 @@
 module.exports = {
   HOST: 'localhost',
   PORT: 3306,
-  USER: 'assignment4',
-  PASSWORD: '1234567890',
+  USER: `${process.env.DB_USER}`,
+  PASSWORD: `${process.env.DB_PASS}`,
   DB: 'afm_interplanetary',
   dialect: 'mysql',
   pool: {
