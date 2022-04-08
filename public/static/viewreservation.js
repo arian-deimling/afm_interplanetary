@@ -21,6 +21,8 @@ $(() => {
 		if (xmlHttp.readyState == 4) {
 			if (xmlHttp.status === 200) {
 
+        console.log(xmlHttp.response[0]);
+
         // if there are no reservations for this user, only display 
         // link to create a reservation
         if (xmlHttp.response.length === 0) {
@@ -43,11 +45,11 @@ $(() => {
         });
         
         // add a row to the table for each reservation
-        for (const { id, num_passengers, createdAt, updatedAt, trip_date } of userTrips) {
+        for (const { id, num_passengers, createdAt, updatedAt, trip_date, seats } of userTrips) {
           const row = $('<tr>')
           // add column data to this row of the table
           row.append($('<td>').html(parseDateLocalTimezone(trip_date).toLocaleDateString('en-US', dateFormat)));
-          row.append($('<td>').html(num_passengers));
+          row.append($('<td>').html(`${num_passengers}<br>${seats.join(' ')}`));
           row.append($('<td>').html(new Date(createdAt).toLocaleString('en-US', dateTimeFormat).replace(', ', '<br>')));
           row.append($('<td>').html(new Date(updatedAt).toLocaleString('en-US', dateTimeFormat).replace(', ', '<br>')));
 

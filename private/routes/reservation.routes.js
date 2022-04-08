@@ -14,6 +14,8 @@ const reservationRoutes = app => {
 
   router.post('/delete', reservationController.deleteReservation);
 
+  router.post('/seats', reservationController.getSeats);
+
   app.use('/api/reservation', router);
 };
 

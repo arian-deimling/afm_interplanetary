@@ -40,7 +40,7 @@ table {
     border-spacing: 2px 1rem;
 }
 
-form input, select, label {
+form input[type=text], input[type=submit], input[type=password], select {
     font-size: 1.5rem;
     padding: 1rem;
     margin: .3rem 0 1.5rem 0;
@@ -51,6 +51,13 @@ form input, select, label {
     border-top-right-radius: 1rem;
     border-bottom-color: black;
     border-bottom-width: 2px;
+    background: #f2f2f2;
+}
+
+form label {
+    font-size: 1.5rem;
+    padding: 1rem;
+    margin: .3rem 0 1.5rem 0;
     background: #f2f2f2;
 }
 
@@ -150,4 +157,33 @@ form select:disabled {
     background-color: #ddd;
     color: black;
     -webkit-text-stroke-width: 0;
-  }
+}
+
+input[type='checkbox']:not(:checked),
+input[type='checkbox']:checked {
+    position: absolute;
+    left: -9999%;
+}
+
+input[type='checkbox']:not(:enabled) + label {
+    background-color: gainsboro;
+}
+
+input[type='checkbox']:checked + label {
+    background-color: lightgreen;
+}
+
+td > input[type='checkbox']:enabled:hover + label {
+  border: 2px solid #5c6aff;
+}
+
+input[type='checkbox'] + label {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: darkblue;
+    background-color: lightyellow;
+    margin-bottom: 10px;
+    border: 2px solid #f2f2f2;
+}

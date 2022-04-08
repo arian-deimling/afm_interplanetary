@@ -18,6 +18,7 @@ const User = require('./user.model')(db.connection, Sequelize);
 const SecurityQuestion = require('./security_question.model')(db.connection, Sequelize);
 const Trip = require('./trip.model')(db.connection, Sequelize);
 const Reservation = require('./reservation.model')(db.connection, Sequelize);
+const Seat = require('./seat.model')(db.connection, Sequelize);
 
 // define table relationships
 SecurityQuestion.hasMany(User, {foreignKey: 'security_question_id'});
@@ -32,12 +33,15 @@ Trip.belongsToMany(User, {
 });
 Reservation.belongsTo(User, {foreignKey: 'user_id'});
 Reservation.belongsTo(Trip, {foreignKey: 'trip_id'});
+Reservation.hasMany(Seat, {foreignKey: 'reservation_id'});
+Seat.belongsTo(Reservation, {foreignKey: 'reservation_id'});
 
 // add models to db object
 db.user = User
 db.security_question = SecurityQuestion
 db.trip = Trip;
 db.reservation = Reservation;
+db.seat = Seat;
 
 // add security questions to the security question table
 // db.security_question.sync({ force: true }).then(async () => {

@@ -3,6 +3,8 @@ AD - remove all secrets from code committed to github (.env file?)
 AD - make <select> tags display current value in gray until a valid one is selected
 Any - change favicon to Moon
 Any - update about page text
+Any - update Interface Document w/ events that prompt the website to do something
+Any - remove all client-side console.log()
 
 LINE_COUNT:
 cat <(find private public -type f -not -name '*.jpg' -not -path '*/lib/*')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 

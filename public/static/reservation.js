@@ -26,6 +26,24 @@ function handlePassengerSelectChange() {
 	}
 }
 
+function checkSeats() {
+	const selectedSeats = $('form').serializeArray().filter(x => x.name.length === 2);
+	const numPassengers = $('form').serializeArray().filter(x => x.name === 'num_passengers')[0];
+	if (selectedSeats.length == numPassengers.value) {
+		$('input[type=submit]')[0].setCustomValidity('');
+		$('input[type=submit]')[0].reportValidity();
+		checkNumPassengers();
+	} else {
+		$('#num_passengers')[0].setCustomValidity('Number of selected seats must match number from passenger selection.');
+		$('#num_passengers')[0].reportValidity();
+		setTimeout(() => {
+			$('#num_passengers')[0].setCustomValidity('');
+			$('#num_passengers')[0].reportValidity();
+		}, 2000);
+	}
+	return selectedSeats.length == numPassengers.value;
+}
+
 async function getAndShowCapacity() {
 	$.post('/api/reservation/capacity', $('form').serialize(), (res) => {
 		// calculate total number of seats user can select
@@ -48,7 +66,10 @@ async function getAndShowCapacity() {
 			showById('editing_msg');
 			$('h2').html('Edit Reservation');
 			$(':submit').attr('value', 'Modify');
+			createSeatSelection();
 		} else {
+			deleteSeatSelection();
+			handlePassengerSelectChange();
 			$('h2').html('New Reservation');
 			$(':submit').attr('value', 'Submit');
 			hideById('editing_msg');
@@ -61,7 +82,97 @@ async function getAndShowCapacity() {
 			$(`#${res.responseJSON.what}`)[0].reportValidity();
 			return;
 		}
-		console.log(res.responseText);
+	});
+}
+
+function deleteSeatSelection() {
+	$('#seat_selection_container').empty();
+}
+
+async function createSeatSelection() {
+
+	deleteSeatSelection();
+
+	if (!checkTripDate() || !checkNumPassengers()) {
+		return;
+	}
+
+	$.post('/api/reservation/seats', $('form').serialize(), (res) => {
+
+		const rows = 3;
+		const columns = 4;
+	
+		const seatSelectContainer = $('#seat_selection_container').addClass('flex-rows').css('margin-bottom', '2rem');
+		const seatSelectSubContainer = $('<div>').css('width', 'fit-content');
+		const front = $('<div>').attr('id', 'front').attr('class', 'flex-cols');
+		const back = $('<div>').attr('id', 'back').attr('class', 'flex-cols');
+		const table = $('<table>');
+		const tbody = $('<tbody>');
+		table.append(tbody);
+	
+		front.append($('<h3>').attr('class', 'black-text').css('padding', '5rem 2rem').html('Cockpit'))
+			.css('border', '3px solid gray')
+			.css('border-top-right-radius', '50% 90%')
+			.css('border-top-left-radius', '50% 90%');
+		
+		back.css('border', '3px solid gray').css('border-top', '0');
+	
+		for (let r = 0; r < rows; r++) {
+			const row = $('<tr>');
+			for (let c = 0; c < columns; c++) {
+				const data = $('<td>');
+				const rowLetter = String.fromCharCode(65 + r);
+				const id = `${rowLetter}${c + 1}`
+				const input = $('<input>').attr('type', 'checkbox').attr('id', id).attr('name', id);
+				const label = $('<label>').attr('for', id);
+
+				// if the user already has this seat selected
+				if (res.userSeats.includes(id)) {
+					input.attr('checked', 'true');
+					label.html(id);
+				}
+				// if another user already has this seat selected
+				if (res.otherSeats.includes(id)) {
+					input.attr('disabled', 'true');
+					label.html('X');
+				}
+				label.html(id);
+
+				data.append(input);
+				data.append(label);
+				row.append(data);
+				if (r === 0 && c === columns / 2 - 1) {
+					row.append($('<td>').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'))
+				}
+				if (r !== 0 && c === columns / 2 - 1) {
+					row.append($('<td>'));
+				}
+			}
+			tbody.append(row);
+		}
+		back.append(table);
+		seatSelectSubContainer.append(front).append(back);
+		seatSelectContainer.append($('<div>').css('width', '100%'));
+		seatSelectContainer.append(seatSelectSubContainer);
+		seatSelectContainer.append($('<div>').css('width', '100%'));
+	})
+	.fail((res) => {
+		// if login status error occurs, notify user and redirect to login page
+		if (res.status === 400 && res.responseJSON.what == 'login_status') {
+			alert('Your session has expired. Please log in again to continue!');
+			window.location.replace('/login');
+			return;
+		}
+		if (res.status === 400 && res.responseJSON.what == 'trip_date') {
+			getAndShowCapacity();
+		}
+		if (res.status === 400) {
+			$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
+			$(`#${res.responseJSON.what}`)[0].reportValidity();
+			return;
+		}
+		// TODO(AD) - redirect to error page
+		alert('Invalid response from the sever.');
 	});
 }
 
@@ -97,15 +208,20 @@ $(() => {
 
 	// validate num_passengers selection on field change
 	$('#num_passengers').on('change', () => {
-		checkNumPassengers();
+		const validPassengers = checkNumPassengers();
 		handlePassengerSelectChange();
+		if (validPassengers) {
+			createSeatSelection();
+		} else {
+			deleteSeatSelection();
+		}
 	});
 
 	$('form').on('submit', (e) => {
 		e.preventDefault();
 
 		// make sure valid input exists; otherwise, do not make request to server
-		if (!checkNumPassengers() || !checkTripDate()) {
+		if (!checkNumPassengers() || !checkTripDate() || !checkSeats()) {
 			return;
 		}
 
@@ -115,6 +231,7 @@ $(() => {
 		})
 		// handle non-success response codes
 		.fail((res) => {
+			console.log(res);
 			// if login status error occurs, notify user and redirect to login page
 			if (res.status === 400 && res.responseJSON.what == 'login_status') {
 				alert('Your session has expired. Please log in again to continue!');
@@ -138,7 +255,6 @@ $(() => {
   xmlHttp.onreadystatechange = () => {
 		if (xmlHttp.readyState == 4) {
 			if (xmlHttp.status === 200) {
-				console.log(xmlHttp.response);
 				// create a function that returns true when available date is passed to
 				// it; sort the list of dates
 				const available = makeAvailability(xmlHttp.response);
@@ -178,3 +294,26 @@ $(() => {
 	xmlHttp.responseType = 'json';
   xmlHttp.send(null);
 });
+
+// INSERT INTO seats (seat, reservation_id) VALUES
+// 	('A1', 2),
+// 	('A2', 2),
+// 	('A3', 2),
+// 	('A4', 2),
+// 	('B1', 2),
+// 	('B2', 2),
+// 	('B3', 2),
+// 	('B4', 2),
+// 	('A1', 4),
+// 	('A2', 4),
+// 	('A3', 4),
+// 	('A4', 4),
+// 	('B1', 4),
+// 	('B2', 4),
+// 	('A1', 7),
+// 	('B3', 10),
+// 	('B4', 10),
+// 	('C1', 10),
+// 	('C2', 10),
+// 	('C3', 10),
+// 	('C4', 10);
