@@ -187,3 +187,10 @@ input[type='checkbox'] + label {
     margin-bottom: 10px;
     border: 2px solid #f2f2f2;
 }
+
+hr {
+    height: 1px;
+    background-color: lightgray;
+    border: none;
+    margin: 2px 0;
+}

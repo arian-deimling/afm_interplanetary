@@ -3,6 +3,15 @@
 <head>
   <%- include('./partials/_head_meta'); %>
   <script src=/viewreservation.js></script>
+  <style>
+    table,
+    td,
+    tr,
+    th {
+      border: 1px solid lightgray;
+      border-collapse: collapse;
+    }
+  </style>
 </head>
 <body>
   <!-- page layout divs -->
@@ -24,7 +33,7 @@
           <table id=reservation_display hidden>
             <tr>
               <th><br>Trip Date</th>
-              <th>Number of Passengers<br>Seats</th>
+              <th>Number of Passengers<hr>Seats</th>
               <th><br>Created</th>
               <th><br>Updated</th>
             </tr>
