@@ -25,6 +25,18 @@ mysql -u <username> -p < setup.sql
 ```
 8. Enter the password you just created when prompted. 
 
+### .env file
+
+1. Create a file named `.env` in the project directory (the directory that this README is in).
+2. Add the following to the file:
+```
+DB_USER=<username>
+DB_PASS=<password>
+SESSION_SECRET=<some-secret>
+```
+3. Replace `<username>` and `<password>` with the credentials that you created in the mysql setup.
+4. Replace `<some-secret>` with a password-like string (e.g. `mY$ecre7`).
+
 ### npm
 
 1. Download Node.js from [`https://nodejs.org/en/download/`](https://nodejs.org/en/download/).
