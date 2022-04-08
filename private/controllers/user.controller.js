@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models');
 const { saltRounds } = require('../config/hash.config');
 const { usernameRegex, passwordRegex, securityQuestionAnswerRegex } = 
-  require('../../public/static/config/validation.config.js');
+  require('../../public/scripts/config/validation.config');
 
 const User = db.user;
 const SecurityQuestion = db.security_question;

@@ -2,7 +2,7 @@
 <html>
 <head>
   <%- include('./partials/_head_meta'); %>
-  <script src=/viewreservation.js></script>
+  <script src=/scripts/viewreservation.js></script>
   <style>
     table,
     td,
@@ -29,7 +29,7 @@
           <!-- header -->
           <h2 class=no-margin-top>Existing Reservations</h2>
 
-          <!-- form fields -->
+          <!-- table to display existing reservations -->
           <table id=reservation_display hidden>
             <tr>
               <th><br>Trip Date</th>
@@ -39,13 +39,8 @@
             </tr>
           </table>
 
+          <!-- message to display if no reservations exist for the user  -->
           <div hidden id=no_reservation class=black-text>No reservations currently exist. <a href=/reservation>Create one?</a></div>
-          <!-- <input type=text id=trip_date name=trip_date placeholder='Select Trip Date'>
-          <div class=flex-rows>
-            <select hidden class=center id=num_passengers name=num_passengers><option value=0>Select Number of Passengers</option></select>
-            <label hidden for=num_passengers>passenger(s)</label>
-          </div>
-          <input id=submit-form type=submit value='Submit' on> -->
         </form>
       </div>
     </div>

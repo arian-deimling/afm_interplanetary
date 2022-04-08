@@ -39,7 +39,7 @@ require('./private/routes/user.routes')(app);
 require('./private/routes/reservation.routes')(app);
 
 // serves static files
-app.use(express.static(path.join(__dirname, '/public/static')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // page aliases redirect only
 app.get(['/index', '/index.html'], (req, res) => res.redirect('/'));
