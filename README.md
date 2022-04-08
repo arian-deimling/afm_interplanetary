@@ -6,15 +6,23 @@
 
 1. Download mysql from [`https://dev.mysql.com/downloads/mysql/`](https://dev.mysql.com/downloads/mysql/).
 2. Open the mysql command-line interface:
-   * ```mysql -u root -p```
+```
+mysql -u root -p
+```
 3. Enter the root password when prompted.
 4. Create a new user:
-   * `CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';`
+```sql
+CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
+```
 5. Grant privileges to the new user:
-   * `GRANT ALL PRIVILEGES ON afm_interplanetary.* TO '<username>'@'localhost';`
+```sql
+GRANT ALL PRIVILEGES ON afm_interplanetary.* TO '<username>'@'localhost';
+```
 6. Exit the mysql command-line interface.
 7. Run the setup SQL commands:
-   * `mysql -u <username> -p < setup.sql`
+```
+mysql -u <username> -p < setup.sql
+```
 8. Enter the password you just created when prompted. 
 
 ### npm
@@ -22,9 +30,13 @@
 1. Download Node.js from [`https://nodejs.org/en/download/`](https://nodejs.org/en/download/).
 2. Open a terminal in the project directory (the directory this README is in).
 3. Install the required packages:
-   * `npm install`
+```
+npm install
+```
 4. Start the server:
-   * `npm start`
+```
+npm start
+```
 
 <!-- 
 ## Usage
