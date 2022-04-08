@@ -17,9 +17,6 @@ class ReservationView {
   }
 
   add(reservation) {
-
-    console.log(reservation);
-
     // unpack reservation data
     const { id, num_passengers, createdAt, updatedAt, trip_date, seats } = reservation;
 

@@ -194,3 +194,7 @@ hr {
     border: none;
     margin: 2px 0;
 }
+
+#seat_selection_container {
+    display: none;
+}
