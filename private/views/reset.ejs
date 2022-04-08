@@ -30,6 +30,7 @@
           <input  hidden  id=security_question_answer type=text     name=security_question_answer placeholder='Security Question Answer'>
           <input  hidden  id=password                 type=password name=password                 placeholder='Choose New Password'>
           <input  hidden  id=pass_verify              type=password name=pass_verify              placeholder='Confirm New Password'>
+          <%- include('./partials/_show_pass'); %> 
           <input  hidden  id=submit-reset             type=submit   name=submit-reset             value='Reset Password' on>  
         </form>
       </div>

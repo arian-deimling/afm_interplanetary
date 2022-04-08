@@ -66,15 +66,15 @@ async function getAndShowCapacity() {
 			showById('editing_msg');
 			$('h2').html('Edit Reservation');
 			$(':submit').attr('value', 'Modify');
-			seatSelection.update();
-			seatSelection.show();
 		} else {
-			seatSelection.hide();
 			handlePassengerSelectChange();
 			$('h2').html('New Reservation');
 			$(':submit').attr('value', 'Submit');
 			hideById('editing_msg');
 		}
+
+		seatSelection.update();
+		seatSelection.show();
 		showById('num_passengers');
 	})
 	.fail((res) => {
@@ -229,13 +229,8 @@ $(() => {
 
 	// validate num_passengers selection on field change
 	$('#num_passengers').on('change', () => {
-		const validPassengers = checkNumPassengers();
+		checkNumPassengers();
 		handlePassengerSelectChange();
-		if (validPassengers) {
-			seatSelection.show();
-		} else {
-			seatSelection.hide();
-		}
 	});
 
 	$('form').on('submit', (e) => {

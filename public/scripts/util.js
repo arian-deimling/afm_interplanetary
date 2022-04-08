@@ -1,7 +1,7 @@
 'use strict';
 
 // TODO(AD) - fix indentation
-
+let passwordFields;
 $(() => {
   $('#logout-link').on('click', (e) => {
     e.preventDefault();
@@ -12,6 +12,18 @@ $(() => {
       window.clearInterval(i);
     }
     window.location.replace('/api/logout');
+  });
+  passwordFields;
+  $('#show-pass').on('change', () => {
+    if (passwordFields === undefined) {
+      passwordFields = $('input[type=password]');
+    }
+    console.log($(this).is(':checked'));
+    if ($('#show-pass').is(':checked')) {
+      passwordFields.attr('type', 'text');
+    } else {
+      passwordFields.attr('type', 'password');
+    }
   });
 })
 

@@ -2,6 +2,8 @@
 
 $(() => {
 
+	hideById('show-pass', 'show-pass-label');
+
 	showById('home-link', 'about-link', 'signup-link', 'login-link')
 
 	// validate password and password verify upon each keypress
@@ -39,7 +41,10 @@ $(() => {
 				$('#security_question_id > option').html(res.security_question);
 
 				// show hidden form elements
-				showById('security_question_id', 'security_question_answer', 'password', 'pass_verify', 'submit-reset');
+				showById(
+					'security_question_id', 'security_question_answer', 'password',
+					'pass_verify', 'submit-reset', 'show-pass', 'show-pass-label'
+				);
 
 			})
 			.fail(res => {
