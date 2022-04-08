@@ -1,3 +1,5 @@
+'use strict';
+
 const security_question = (sequelize, Sequelize) => {
 
   const SecurityQuestion = sequelize.define('security_question', {

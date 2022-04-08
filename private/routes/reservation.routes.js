@@ -1,3 +1,5 @@
+'use strict';
+
 const reservationRoutes = app => {
 
   const reservationController = require('../controllers/reservation.controller');

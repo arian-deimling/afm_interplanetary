@@ -1,3 +1,5 @@
+'use strict';
+
 // TODO(AD) - update DB info
 module.exports = {
   HOST: 'localhost',

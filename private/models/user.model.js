@@ -1,3 +1,5 @@
+'use strict';
+
 const user = (sequelize, Sequelize) => {
 
   const User = sequelize.define('user', {

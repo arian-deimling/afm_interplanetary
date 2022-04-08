@@ -1,3 +1,5 @@
+'use strict';
+
 const trip = (sequelize, Sequelize) => {
 
   const Trip = sequelize.define('trip', {

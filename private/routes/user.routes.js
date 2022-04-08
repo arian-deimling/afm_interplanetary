@@ -1,3 +1,5 @@
+'use strict';
+
 const userRoutes = app => {
 
   const user_controller = require('../controllers/user.controller');

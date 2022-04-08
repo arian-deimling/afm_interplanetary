@@ -1,3 +1,5 @@
+'use strict';
+
 const securityQuestionRoutes = app => {
 
   const security_question_control = require('../controllers/security_question.controller');

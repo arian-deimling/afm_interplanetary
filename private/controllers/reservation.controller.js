@@ -1,3 +1,5 @@
+'use strict';
+
 const sequelize = require('sequelize');
 const db = require('../models');
 
@@ -451,7 +453,7 @@ const getSeats = async (req, res) => {
   });
 }
 
-reservationController = {
+const reservationController = {
   getTripDates: getTripDates,
   getRemainingCapacity: getRemainingCapacity,
   create: create,

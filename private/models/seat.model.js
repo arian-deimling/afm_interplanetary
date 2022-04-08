@@ -1,3 +1,5 @@
+'use strict';
+
 const seat = (sequelize, Sequelize) => {
 
   const Seat = sequelize.define('seat', {

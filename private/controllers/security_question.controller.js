@@ -1,3 +1,5 @@
+'use strict';
+
 const db = require('../models');
 
 const SecurityQuestion = db.security_question;
@@ -16,7 +18,7 @@ const getQuestions = async (_, res) => {
   res.status(200).send(securityQuestionQueryResult);
 };
 
-security_question_controller = {
+const security_question_controller = {
   getQuestions: getQuestions,
 }
 
