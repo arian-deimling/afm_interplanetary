@@ -6,7 +6,7 @@
 
 1. Download mysql from [`https://dev.mysql.com/downloads/mysql/`](https://dev.mysql.com/downloads/mysql/).
 2. Open the mysql command-line interface:
-   * `mysql -u root -p`
+   * ```mysql -u root -p```
 3. Enter the root password when prompted.
 4. Create a new user:
    * `CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';`
