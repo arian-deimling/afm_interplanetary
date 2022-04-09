@@ -8,4 +8,7 @@ Any - remove all client-side console.log()
 Any - add 'use strict'; to all js code
 
 LINE_COUNT:
-cat <(find private public -type f -not -name '*.jpg' -not -path '*/lib/*')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 
+cat <(find private public -type f -not -name '*.jpg' -not -name '*.ico' -not -path '*/lib/*' -not -path '*/resources/*')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 
+
+Production:
+AD - enable minify
