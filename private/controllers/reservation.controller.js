@@ -337,6 +337,14 @@ const create = async (req, res) => {
 
 const allReservations = async (req, res) => {
 
+  if (!req.session.userID) {
+    res.status(400).send({
+      what: 'login_status',
+      message: 'You must be logged in to view reservations.',
+    });
+    return;
+  }
+
   let spotsTaken = await Reservation.findAll({
     where: { user_id: req.session.userID },
     include: [Trip],
@@ -363,6 +371,14 @@ const allReservations = async (req, res) => {
 }
 
 const deleteReservation = async (req, res) => {
+
+  if (!req.session.userID) {
+    res.status(400).send({
+      what: 'login_status',
+      message: 'You must be logged in to delete a reservation.',
+    });
+    return;
+  }
 
   // make sure a reservation identifier was provided
   if (!req.body.id) {
