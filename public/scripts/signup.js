@@ -23,33 +23,34 @@ $(() => {
   xmlHttp.send(null);
 
   // validate username input
-  $('#username').on('keypress', (e) => {
+  $('#username').on('keyup', (e) => {
     if (e.key !== 'Enter') {
       checkUsername();
+      console.log('checked');
     }
   });
 
   // validate password input
-  $('#password').on('keyup', () => {
+  $('#password').on('keyup', (e) => {
     if (e.key !== 'Enter') {
       checkPassword();
     }
   });
 
   // validate confirm password input
-  $('#pass_verify').on('keyup', () => {
+  $('#pass_verify').on('keyup', (e) => {
     if (e.key !== 'Enter') {
       checkPassVerify();
     }
   });
 
   // validate security question input
-  $('#security_question_id').on('change', () => {
+  $('#security_question_id').on('change', (e) => {
     checkSecurityQuestion();
   });
 
   // validate security question answer
-  $('#security_question_answer').on('keyup', () => {
+  $('#security_question_answer').on('keyup', (e) => {
     if (e.key !== 'Enter') {
       checkSecurityQuestionAnswer();
     }

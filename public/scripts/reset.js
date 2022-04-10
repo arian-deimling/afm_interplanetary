@@ -6,7 +6,7 @@ $(() => {
 
 	showById('home-link', 'signup-link', 'login-link')
 
-	// validate password and password verify upon each keypress
+	// validate password and password verify upon each keyup
 	$('#password').on('keyup', () => {
 		checkPassword();
 	});
