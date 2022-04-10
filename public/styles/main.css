@@ -1,9 +1,11 @@
 body {
     background-image: url('/img/moon-main.jpg');
-    background-size: 100%;
+    background-size: cover;
     font-family: 'Open Sans', sans-serif;
     color: #f2f2f2;
     text-align: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 h1 {

@@ -220,7 +220,7 @@ const create = async (req, res) => {
   // if there are not enough seats 
   if (capacityResult.remainingCapacity + currentReservedSeats < reservationInfo.num_passengers) {
     res.status(400).send({
-      what: 'trip_date',
+      what: 'num_passengers',
       message: 'The number of passengers exceeds the remaining capacity for this trip.',
     });
     return;

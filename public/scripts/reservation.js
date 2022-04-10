@@ -250,7 +250,7 @@ $(() => {
 				window.location.replace('/login');
 				return;
 			}
-			if (res.status === 400 && res.responseJSON.what == 'trip_date') {
+			if (res.status === 400 && res.responseJSON.what == 'num_passengers') {
 				getAndShowCapacity();
 			}
 			if (res.status === 400) {
