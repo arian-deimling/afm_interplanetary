@@ -58,9 +58,12 @@ $(() => {
 
 			})
 			.fail(res => {
-				console.log(res.responseJSON);
-				$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
-				$(`#${res.responseJSON.what}`)[0].reportValidity();
+				if (res.status === 400) {
+					$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
+					$(`#${res.responseJSON.what}`)[0].reportValidity();
+				} else {
+					window.location.replace('/500')
+				}
 			});
 		}
 
@@ -78,9 +81,12 @@ $(() => {
 				window.location.replace('/login');
 			})
 			.fail((res, status, err) => {
-				console.log('fail lower: ' + String(res));
-				$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
-				$(`#${res.responseJSON.what}`)[0].reportValidity();
+				if (res.status === 400) {
+					$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
+					$(`#${res.responseJSON.what}`)[0].reportValidity();
+				} else {
+					window.location.replace('/500')
+				}
 			});
 		}
 	});

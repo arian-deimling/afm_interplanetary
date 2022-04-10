@@ -101,6 +101,12 @@ app.get('/reservation/view', (req, res) => {
   }
   res.render('viewreservation');
 });
+app.get('/500', (req, res) => {
+  res.status(500).render('500');
+})
+app.use((req, res) => {
+  res.status(404).render('404');
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

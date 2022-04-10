@@ -83,6 +83,7 @@ async function getAndShowCapacity() {
 			$(`#${res.responseJSON.what}`)[0].reportValidity();
 			return;
 		}
+		window.location.replace('/500');
 	});
 }
 
@@ -174,21 +175,16 @@ class SeatSelection {
 		})
 		.fail((res) => {
 			// if login status error occurs, notify user and redirect to login page
-			if (res.status === 400 && res.responseJSON.what == 'login_status') {
-				alert('Your session has expired. Please log in again to continue!');
-				window.location.replace('/login');
-				return;
-			}
 			if (res.status === 400 && res.responseJSON.what == 'trip_date') {
 				getAndShowCapacity();
+				return;
 			}
 			if (res.status === 400) {
 				$(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
 				$(`#${res.responseJSON.what}`)[0].reportValidity();
 				return;
 			}
-			// TODO(AD) - redirect to error page
-			alert('Invalid response from the sever.');
+			window.location.replace('/500');
 		});
 	}
 }
@@ -213,7 +209,7 @@ $(() => {
 
 	// check login every 5 sec and redirect to login
 	// page is user becomes logged out
-	loginCheck();
+	forceLoggedIn();
 
 	// force user to select date from calendar instead of keyboard
 	$('#trip_date').on('keydown', (e) => {

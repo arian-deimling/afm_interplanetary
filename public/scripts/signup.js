@@ -5,18 +5,19 @@ $(() => {
   showById('home-link', 'login-link');
 
   // redirect the user if the user becomes logged in while viewing the page
-  redirectOnLogin();
+  forceNotLoggedIn();
 
   let xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = () => {
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-      console.log(JSON.parse(xmlHttp.responseText));
+  xmlHttp.onload = () => {
+    if (xmlHttp.status === 200) {
       for (let {id, question} of JSON.parse(xmlHttp.responseText)) {
         $('#security_question_id').append(
           `<option value=${id}>${question}</option>`
         );
       }
+      return;
     }
+    window.location.replace('/500');
   }
   xmlHttp.open('GET', '/api/security_questions', true);
   xmlHttp.send(null);
@@ -68,13 +69,11 @@ $(() => {
     })
     // handle non-success response codes
     .fail((res) => {
-      console.log(res.responseText);
       if (res.status === 400) {
         $(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
         $(`#${res.responseJSON.what}`)[0].reportValidity();
       } else {
-        // TODO(AD) - redirect to error page
-        alert('Invalid response from the server.');
+        window.location.replace('/500');
       }
     });
   });

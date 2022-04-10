@@ -17,7 +17,6 @@ $(() => {
     if (passwordFields === undefined) {
       passwordFields = $('input[type=password]');
     }
-    console.log($(this).is(':checked'));
     if ($('#show-pass').is(':checked')) {
       passwordFields.attr('type', 'text');
     } else {
@@ -50,19 +49,18 @@ function parseDateLocalTimezone(date) {
   return date;
 }
 
-function loginCheck() {
+function forceLoggedIn() {
   window.setInterval(async () => {
     let loggedIn;
     try {
       loggedIn = await checkUserLoggedIn();
     } catch (err) {
-      // TODO(AD) - need to do something better here
-      console.log(err);
+      // do nothing on error response from server
       return;
     }
     // if user becomes logged out, redirect to login page
     if (!loggedIn) {
-      clearInterval(loginCheck);
+      clearInterval(forceLoggedIn);
       alert('Your session has expired. Please log in again to continue!');
       window.location.replace('/login');
     }
@@ -194,18 +192,12 @@ function checkUserLoggedIn() {
         });
       }
     };
-    xmlHttp.onerror = () => {
-      reject({
-        message: 'Unexpected response from the server.',
-        response: xmlHttp.responseText,
-      });
-    };
     xmlHttp.send();
   });
 }
 
 // redirect the user to the home page if they are logged in
-async function redirectOnLogin() {
+async function forceNotLoggedIn() {
   // check login every 5 sec and redirect to home
 	// page is user becomes logged in
 	window.setInterval(async () => {
@@ -213,8 +205,7 @@ async function redirectOnLogin() {
 		try {
 			loggedIn = await checkUserLoggedIn();
 		} catch (err) {
-			// TODO(AD) - need to do something better here
-			console.log(err);
+      // do nothing on error checking login status
 			return;
 		}
 		// if user becomes logged out, redirect to login page

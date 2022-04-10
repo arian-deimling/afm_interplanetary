@@ -6,8 +6,7 @@ function deleteButton(anchor) {
     anchor.parent().parent().attr('hidden', '');
   })
   .fail((res) => {
-    alert('Error: Unable to delete reservation');
-    console.log(res);
+    alert('Error: Unable to delete reservation.');
   });
 }
 
@@ -94,21 +93,26 @@ $(() => {
 
   // request user's reservations from the server
   let xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = () => {
-		if (xmlHttp.readyState == 4) {
-			if (xmlHttp.status === 200) {
-        // if there are no reservations for this user, only display 
-        // link to create a reservation
-        if (xmlHttp.response.length === 0) {
-          $('#no_reservation').removeAttr('hidden');
-          return;
-        }
-        // if there are reservations add them to the reservation view
-        reservationView.addAll(xmlHttp.response);
-        reservationView.show();        
-			}
-		}
-  }
+  // xmlHttp.onreadystatechange = () => {
+	// 	if (xmlHttp.readyState == 4) {
+
+	// 	}
+  // }
+  xmlHttp.addEventListener('load', (e) => {
+    if (xmlHttp.status === 200) {
+      // if there are no reservations for this user, only display 
+      // link to create a reservation
+      if (xmlHttp.response.length === 0) {
+        $('#no_reservation').removeAttr('hidden');
+        return;
+      }
+      // if there are reservations add them to the reservation view
+      reservationView.addAll(xmlHttp.response);
+      reservationView.show();        
+    } else {
+      window.location.replace('/500');
+    }
+  });
   xmlHttp.open('GET', '/api/reservation', true);
 	xmlHttp.responseType = 'json';
   xmlHttp.send(null);

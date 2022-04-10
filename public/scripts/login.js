@@ -5,7 +5,7 @@ $(() => {
 	showById('home-link', 'signup-link');
 
 	// redirect the user if the user becomes logged in while viewing the page
-	redirectOnLogin();
+	forceNotLoggedIn();
 
   $('#username').on('keyup', (e) => {
 		if (e.key === 'Enter') {
@@ -41,9 +41,9 @@ $(() => {
 			if (res.status == 400) {
         $(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
         $(`#${res.responseJSON.what}`)[0].reportValidity();
-			} else {
-				alert('Invalid response from the server.');
+				return;
 			}
+			window.location.replace('/500');
 		});
 	});
 });
