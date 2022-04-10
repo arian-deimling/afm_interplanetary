@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AFM Interplanetary Final Documentation</title>
+<style>
+  a:visited {
+    color: blue;
+  }
+
+  .flex-cols {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .flex-rows {
+    display: flex;
+    flex-direction: rows;
+  }
+  .margin-1 {
+    margin: 1rem;
+  }
+
+  .margin-top-1rem {
+    margin-top: 1rem;
+  }
+
+  .width-100 {
+    width: 100%;
+  }
+
+  .width-40p {
+    width: 40%;
+  }
+
+  .width-60p {
+    width: 60%;
+  }
+
+  .no-wrap {
+    white-space: nowrap;
+  }
+
+  .all-border-table-container table, 
+  .all-border-table-container tbody, 
+  .all-border-table-container thead, 
+  .all-border-table-container th, 
+  .all-border-table-container tr, 
+  .all-border-table-container td {
+    border: 1px solid black;
+  }
+
+  .center-table-container table, 
+  .center-table-container tbody, 
+  .center-table-container thead, 
+  .center-table-container th, 
+  .center-table-container tr, 
+  .center-table-container td {
+    text-align: center;
+  }
+
+  .left-table-container 
+  .left-table-container table,
+  .left-table-container tbody,
+  .left-table-container thead,
+  .left-table-container th,
+  .left-table-container tr,
+  .left-table-container td {
+    text-align: left;
+  }
+
+  .default-table-container table,
+  .default-table-container tbody,
+  .default-table-container thead,
+  .default-table-container th,
+  .default-table-container tr,
+  .default-table-container td {
+    border-collapse: collapse;
+    padding: 2px 8px;
+  }
+
+  .default-table-container th,
+  .default-table-container table {
+    border: 1px solid black;
+  }
+
+  .default-table-container td {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+  }
+
+  @media print {
+    @page {
+      size: auto;
+      size: portrait;
+      margin: 2.5%;
+    }
+    .pb {
+      page-break-before: always;
+    }
+    .pb-opt {
+      page-break-before: auto;
+    }
+    table {
+      page-break-inside: avoid;
+    }
+    img {
+      page-break-inside: avoid;
+    }
+  }
+
+</style>
+<script>
+  'use strict';
+  document.addEventListener('DOMContentLoaded', () => {
+    let link = document.getElementById('printable')
+    link.onclick = (e) => {
+      e.preventDefault();
+      let flexCols = Array.from(document.getElementsByClassName('flex-cols'));
+      flexCols.forEach(x => x.style.display = 'block');
+      link.parentNode.removeChild(link);
+      let links = Array.from(document.getElementsByTagName('a'));
+      links.forEach(x => x.style.color = 'black');
+      links.forEach(x => x.style.textDecoration = 'none');
+      let widthClassElements = Array.from(document.getElementsByClassName('.width-40p'));
+      Array.from(document.getElementsByTagName('img')).forEach(x => x.style.width = '100%');
+      Array.from(document.getElementsByTagName('table')).forEach(x => x.style.width = '100%');
+    }
+  });
+</script>
+</head>
+<body class='flex-cols'>
+  <a href='' id=printable>Make Printer Friendly</a>
+  <h1>AFM Interplanetary Final Documentation</h1>
+  <h3>CSCI 4300 - Spring 2022</h3>
+  <div class='flex-rows'>
+    <div class='margin-1 flex-cols'>
+      <div>Arian Deimling</div><div><a href=mailto:amd79287@uga.edu>amd79287@uga.edu</a></div>
+    </div>
+    <div class='margin-1 flex-cols'>
+      <div>Mir Patel</div><div><a href=mailto:mvp05058@uga.edu>mvp05058@uga.edu</a></div>
+    </div>
+    <div class='margin-1 flex-cols'>
+      <div>Fehintola Kofo-Idowu</div><div><a href=mailto:ffk00226@uga.edu>ffk00226@uga.edu</a></div>
+    </div>
+  </div>
+  <div class='width-100'>
+    <h2>Contents</h2>
+    <ol>
+      <li><a href=#schedule>Schedule</a></li>
+      <li><a href=#division-of-work>Division of Work</a></li>
+      <ol type=I>
+        <li><a href=#division-of-work-coding>Coding</a></li>
+        <li><a href=#division-of-work-documentation>Documentation</a></li>
+      </ol>
+      <li><a href=#use-case-diagram>Use-Case Diagram</a></li>
+      <li><a href=#er-diagram>ER Diagram / Relational Schema</a></li>
+      <li><a href=#interface-document>Interface Document</a></li>
+      <ol type=I>
+        <li><a href=#interface-signup>Sign Up</a></li>
+        <li><a href=#interface-login>Login</a></li>
+        <li><a href=#interface-reset>Reset Password</a></li>
+        <li><a href=#interface-new>New / Edit Reservation</a></li>
+        <li><a href=#interface-view>View Reservations</a></li>
+      </ol>
+      <li><a href=#navigational-chart>Navigational Chart</a></li>
+      <li><a href=#crud-matrix>Crud Matrix</a></li>
+    </ol>
+  </div>
+  <div class='width-100 pb'>
+    <a name=schedule><h2>1. Schedule</h2></a>
+    <div class='flex-cols default-table-container center-table-container'>
+      <table>
+        <thead style='border-collapse: separate;'>
+          <tr style='border-collapse: separate;'>
+            <th>Task</th>
+            <th>Page/Action</th>
+            <th>Approx. Duration</th>
+            <th>Planned Start</th>
+            <th>Planned Finish</th>
+            <!-- <th>Actual Finish</th> -->
+          </tr>
+        </thead>
+        <tbody style='border-collapse: separate;'>
+          <tr style='border-top: 3px double black; border-bottom: 1px dotted black;'>
+            <td style='vertical-align: top;'><b><em>HTML</em></b></td>
+            <td></td>
+            <td><b><em>26 days</em></b></td>
+            <td><b><em>Jan 31</em></b></td>
+            <td><b><em>Feb 25</em></b></td>
+            <!-- <td><b><em>Mar 2</em></b></td> -->
+          </tr>
+          <tr>
+            <td rowspan=7></td>
+            <td>Home</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 3</td> -->
+          </tr>
+          <tr>
+            <td>About</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 4</td> -->
+          </tr>
+          <tr>
+            <td>Sign Up</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Login</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>New/Edit Reservation</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>View Reservations</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr style='border-top: 3px double black; border-bottom: 1px dotted black;'>
+            <td style='vertical-align: top;'><b><em>CSS</em></b></td>
+            <td></td>
+            <td><b><em>26 days</em></b></td>
+            <td><b><em>Jan 31</em></b></td>
+            <td><b><em>Feb 25</em></b></td>
+            <!-- <td><b><em>Mar 2</em></b></td> -->
+          </tr>
+          <tr>
+            <td rowspan=7></td>
+            <td>Home</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 3</td> -->
+          </tr>
+          <tr>
+            <td>About</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 4</td> -->
+          </tr>
+          <tr>
+            <td>Sign Up</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Login</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>New/Edit Reservation</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>View Reservations</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr style='border-top: 3px double black;  border-bottom: 1px dotted black;'>
+            <td style='vertical-align: top;'><b><em>JavaScript/jQuery (Front-end)</em></b></td>
+            <td></td>
+            <td><b><em>26 days</em></b></td>
+            <td><b><em>Jan 31</em></b></td>
+            <td><b><em>Feb 25</em></b></td>
+            <!-- <td><b><em>Mar 2</em></b></td> -->
+          </tr>
+          <tr>
+            <td rowspan=9></td>
+            <td>Home</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 3</td> -->
+          </tr>
+          <tr>
+            <td>About</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 4</td> -->
+          </tr>
+          <tr>
+            <td>Sign Up</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Login</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <td>Logout</td>
+          <td>7 days</td>
+          <td>Jan 31</td>
+          <td>Feb 28</td>
+          <!-- <td>Mar 2</td> -->
+        </tr>
+        <tr>
+            <td>New/Edit Reservation</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>View Reservations</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Delete Reservation</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr style='border-top: 3px double black;  border-bottom: 1px dotted black;'>
+            <td style='vertical-align: top;'><b><em>Controller (Back-end)</em></b></td>
+            <td></td>
+            <td><b><em>26 days</em></b></td>
+            <td><b><em>Jan 31</em></b></td>
+            <td><b><em>Feb 25</em></b></td>
+            <!-- <td><b><em>Mar 2</em></b></td> -->
+          </tr>
+          <tr>
+            <td rowspan=9></td>
+            <td>Home</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 3</td> -->
+          </tr>
+          <tr>
+            <td>About</td>
+            <td>2 days</td>
+            <td>Jan 31</td>
+            <td>Feb 1</td>
+            <!-- <td>Feb 4</td> -->
+          </tr>
+          <tr>
+            <td>Sign Up</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Login</td>
+            <td>5 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+            <td>Logout</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>New/Edit Reservation</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>View Reservations</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+          <tr>
+            <td>Delete Reservation</td>
+            <td>7 days</td>
+            <td>Jan 31</td>
+            <td>Feb 28</td>
+            <!-- <td>Mar 2</td> -->
+          </tr>
+        </tbody>
+      </table>
+      <caption>Table 1.1: Schedule</caption>
+    </div>
+  </div>
+  <div class='width-100 pb'>
+    <a name=division-of-work><h2>2. Division of Work</h2></a>
+    <a name=division-of-work-coding><h3>&nbsp;I. Coding</h3></a>
+    <div class='flex-cols default-table-container center-table-container'>
+      <!-- TODO(AD) - fix placeholder values -->
+      <table>
+        <thead>
+          <tr>
+            <th>Page/Action</th>
+            <th>HTML</th>
+            <th>CSS</th>
+            <th>JavaScript/jQuery (Front-end)</th>
+            <th>Controller (Back-end)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Home</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <!-- TODO(AD) - keep this??? -->
+          <tr>
+            <td>About</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>Sign Up</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>Login</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>Logout</td>
+            <td>-</td>
+            <td>-</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>New/Edit Reservation</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>View Reservations</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+          <tr>
+            <td>Delete Reservation</td>
+            <td>-</td>
+            <td>-</td>
+            <td>Name Placeholder</td>
+            <td>Name Placeholder</td>
+          </tr>
+        </tbody>
+      </table>
+      <cation>Table 2.1: Division of Work - Coding</cation>
+    </div>
+    <a name=division-of-work-coding><h3>&nbsp;II. Documentation</h3></a>
+    <div class='flex-cols default-table-container left-table-container'>
+      <table>
+        <thead>
+          <tr>
+            <th>Documentation</th>
+            <th>Author(s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Schedule</td>
+            <td>Arian</td>
+          </tr>
+          <tr>
+            <td>Division of Work</td>
+            <td>Arian</td>
+          </tr>
+          <tr>
+            <td>Use-Case Diagram</td>
+            <td>Arian</td>
+          </tr>
+          <tr>
+            <td>ER Diagram / Relational Schema</td>
+            <td>Arian</td>
+          </tr>
+          <tr>
+            <td>Interface Document</td>
+            <td>Arian</td>
+          </tr>
+        </tbody>
+      </table>
+      <caption>Table 3.1: Division of Work - Documentation</caption>
+    </div>
+  </div>
+  <div class='width-100 pb'>
+    <a name=use-case-diagram><h2>3. Use-Case Diagram</h2></a>
+  </div>
+  <div class='width-100 pb'>
+    <a name=er-diagram><h2>4. ER Diagram / Relational Schema</h2></a>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/er_diagram.png>
+      <caption>Figure 4.1: Entity Relationship Diagram</caption>
+    </div>
+  </div>
+  <div class='width-100 pb'>
+    <a name=interface-document><h2>5. Interface Document</h2></a>
+    <a name=interface-signup><h3>&nbsp;I. Sign Up</h3></a>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/signup.png>
+      <caption>Figure 5.1.1: Signup Form</caption>
+    </div>
+    <div class='flex-cols default-table-container left-table-container all-border-table-container margin-top-1rem'>
+      <table class='width-40p'>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Event</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='no-wrap'>1</td>
+            <td rowspan=4 class='no-wrap'>printable character input</td>
+            <td>Validate <em>username</em> input field and display message to user if field value is invalid.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>2</td>
+            <td>Validate <em>password</em> input field and display message to user if field value is invalid.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>3</td>
+            <td>Validate <em>password verification</em> input field and display message to user if field value is invalid.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>6</td>
+            <td>Validate <em>security quesiton answer</em> input field and display message to user if field value is invalid.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>4</td>
+            <td class='no-wrap'>left-mouse click</td>
+            <td>Toggle <em>checkbox</em>. If <em>checkbox</em> is checked, set <em>password</em> field to plain-text; otherwise, set <em>password</em> field to hidden-text.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>5</td>
+            <td class='no-wrap'>select question</td>
+            <td>Validate <em>security quesiton</em> selection field and display message to user if field value is invalid.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>1, 2, 3, 6</td>
+            <td class='no-wrap'>&lt;ENTER&gt; keypress</td>
+            <td rowspan=2>Validate <em>username</em>, <em>password</em>, <em>password verification</em>, <em>security question</em>, & <em>security question answer</em> input fields and display message to user if any field value is invalid; otherwise, POST field values to the server.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>7</td>
+            <td class='no-wrap'>left-mouse click</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>N/A</td>
+            <td class='no-wrap'>response from server</td>
+            <td>If response from server is OK, redirect user to Login Page; otherwise, display server error message to user.</td>
+          </tr>
+        </tbody>
+      </table>
+      <caption>Table 5.2.1: Sign Up Form Interface</caption>
+    </div>
+    <a name=interface-login><h3>&nbsp;II. Login</h3></a>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/login.png>
+      <br style='display: contents;'>
+      <caption>Figure 5.2.1: Login Form</caption>
+    </div>
+    <div class='flex-cols default-table-container left-table-container all-border-table-container margin-top-1rem'>
+      <table class='width-40p'>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Event</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='no-wrap'>3</td>
+            <td class='no-wrap'>left-mouse click</td>
+            <td>Toggle <em>checkbox</em>. If <em>checkbox</em> is checked, set <em>password</em> field to plain-text; otherwise, set <em>password</em> field to hidden-text.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>5</td>
+            <td class='no-wrap'>left-mouse click</td>
+            <td>Redirect user to Reset Password Page.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>1, 2</td>
+            <td class='no-wrap'>&lt;ENTER&gt; keypress</td>
+            <td rowspan=2>Validate <em>username</em> and <em>password</em> input field and display message to user if either field value is invalid; otherwise, POST field values to the server.</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>4</td>
+            <td class='no-wrap'>left-mouse click</td>
+          </tr>
+          <tr>
+            <td class='no-wrap'>N/A</td>
+            <td class='no-wrap'>response from server</td>
+            <td>If response from server is OK, redirect user to Home Page; otherwise, display server error message to user.</td>
+          </tr>
+        </tbody>
+      </table>
+      <caption>Table 5.2.1: Login Form Interface</caption>
+    </div>
+    <a name=interface-reset><h3>&nbsp;III. Reset Password</h3></a>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/reset1.png>
+      <caption>Figure 5.3.1: Reset Password Form - Initial State</caption>
+    </div>
+    <br>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/reset2.png>
+      <caption>Figure 5.3.2: Reset Password Form - Valid Username Input State</caption>
+    </div>
+    <a name=interface-new><h3>&nbsp;IV. New / Edit Reservation</h3></a>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/new1.png>
+      <caption>Figure 5.4.1: New Reservation - Initial State</caption>
+    </div>
+    <br>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/new2.png>
+      <caption>Figure 5.4.2: New Reservation - Valid Date Input & No Existing Reservation State</caption>
+    </div>
+    <br>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/new3.png>
+      <caption>Figure 5.4.3: New Reservation - Valid Date Input & Existing Reservation State</caption>
+    </div>
+    <a name=interface-view><h3>&nbsp;V. View Reservations</h3></a>
+    <div class='flex-cols'>
+      <img class='width-60p' src=/documentation/resources/view.png>
+      <caption>Figure 5.5.1: New Reservation - Valid Date Input & Existing Reservation State</caption>
+    </div>
+  </div>
+  <div class='width-100 pb'>
+    <a name=navigational-chart><h2>6. Navigational Chart</h2></a>
+    <div class='flex-cols'>
+      <img class='width-40p' src=/documentation/resources/nav_chart.png>
+      <caption>Figure 6.1: Navigational Chart</caption>
+    </div>
+  </div>
+  <div class='width-100 pb'>
+    <a name=crud-matrix><h2>7. CRUD Matrix</h2></a>
+    <div class='flex-cols default-table-container center-table-container all-border-table-container'>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>users</th>
+            <th>security_questions</th>
+            <th>reservations</th>
+            <th>seats</th>
+            <th>trips</th>
+            <th>sessions</th>
+          </tr>
+        </thead>
+        <!-- 
+          C - CREATE
+          R - READ
+          U - UPDATE
+          D - DELETE
+         -->
+        <tbody>
+          <tr>
+            <td>Sign Up</td>
+            <td>CR</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>R</td>
+          </tr>
+          <tr>
+            <td>Login</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>RU</td>
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>RU</td>
+            <td>R</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>R</td>
+          </tr>          
+          <tr>
+            <td>Logout</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>U</td>
+          </tr>
+          <tr>
+            <td>New/Edit Reservation</td>
+            <td></td>
+            <td></td>
+            <td>CRU</td>
+            <td>CR</td>
+            <td>R</td>
+            <td>R</td>
+          </tr>
+          <tr>
+            <td>View Reservations</td>
+            <td></td>
+            <td></td>
+            <td>R</td>
+            <td>R</td>
+            <td>R</td>
+            <td>R</td>
+          </tr>
+          <tr>
+            <td>Delete Reservation</td>
+            <td></td>
+            <td></td>
+            <td>D</td>
+            <td>D</td>
+            <td></td>
+            <td>R</td>
+          </tr>
+        </tbody>
+      </table>
+      <caption>Table 7.1: CRUD Matrix</caption>
+    </div>
+  </div>
+</body>
+</html>
