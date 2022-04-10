@@ -78,27 +78,6 @@ INSERT INTO `trips` VALUES
     (8309, DATE '2022-10-01', 12),
     (8323, DATE '2022-10-15', 12);
 
-SELECT * FROM `trips` ORDER BY `id`; 
-                                  /*
-+------+------------+----------+
-| id   | date       | capacity |
-+------+------------+----------+
-| 8141 | 2022-04-16 |       12 |
-| 8162 | 2022-05-07 |       12 |
-| 8176 | 2022-05-21 |       12 |
-| 8190 | 2022-06-04 |       12 |
-| 8204 | 2022-06-18 |       12 |
-| 8218 | 2022-07-02 |       12 |
-| 8232 | 2022-07-16 |       12 |
-| 8253 | 2022-08-06 |       12 |
-| 8267 | 2022-08-20 |       12 |
-| 8281 | 2022-09-03 |       12 |
-| 8295 | 2022-09-17 |       12 |
-| 8309 | 2022-10-01 |       12 |
-| 8323 | 2022-10-15 |       12 |
-+------+------------+----------+
-                                  */
-
 INSERT INTO `security_questions` VALUES 
     (1, 'What was your childhood nickname?'),
     (2, 'In what city did you meet your spouse/significant other?'),
@@ -108,21 +87,6 @@ INSERT INTO `security_questions` VALUES
     (6, "What is your oldest sibling's middle name?"),
     (7, 'What school did you attend for sixth grade?'),
     (8, "What is your oldest cousin's first and last name?");
-
-SELECT * FROM `security_questions` ORDER BY `id`;
-                                                                  /*
-+----+----------------------------------------------------------+
-| id | question                                                 |
-+----+----------------------------------------------------------+
-|  1 | What was your childhood nickname?                        |
-|  2 | In what city did you meet your spouse/significant other? |
-|  3 | What is the name of your favorite childhood friend?      |
-|  4 | What street did you live on in third grade?              |
-|  5 | What is the middle name of your youngest child?          |
-|  6 | What is your oldest sibling's middle name?               |
-|  7 | What school did you attend for sixth grade?              |
-|  8 | What is your oldest cousin's first and last name?        |
-+----+----------------------------------------------------------+ */
 
 INSERT INTO `users` VALUES
     (1, 1, 'arian123', 
