@@ -3,7 +3,11 @@
 // handle click of delete button
 function deleteButton(anchor) {
   $.post('/api/reservation/delete', {id: anchor.attr('value')}, (res) => {
-    anchor.parent().parent().attr('hidden', '');
+    anchor.parent().parent().remove();
+    if ($('tbody tr').length === 0) {
+      $('#reservation_display').attr('hidden', '');
+      $('#no_reservation').removeAttr('hidden');
+    }
   })
   .fail((res) => {
     alert('Error: Unable to delete reservation.');
@@ -13,6 +17,7 @@ function deleteButton(anchor) {
 class ReservationView {
   constructor(reservationTable) {
     this.table = reservationTable;
+    this.body = this.table.find('tbody');
   }
 
   add(reservation) {
@@ -62,7 +67,7 @@ class ReservationView {
     row.append(tableEntry);
 
     // add the row to the table
-    this.table.append(row);
+    this.body.append(row);
   }
 
   addAll(reservationArray) {
@@ -89,15 +94,10 @@ $(() => {
 
   $('form').css('width', '80%');
 	showById('home-link', 'logout-link', 'reservation-link');
-  loginCheck();
+  forceLoggedIn();
 
   // request user's reservations from the server
   let xmlHttp = new XMLHttpRequest();
-  // xmlHttp.onreadystatechange = () => {
-	// 	if (xmlHttp.readyState == 4) {
-
-	// 	}
-  // }
   xmlHttp.addEventListener('load', (e) => {
     if (xmlHttp.status === 200) {
       // if there are no reservations for this user, only display 

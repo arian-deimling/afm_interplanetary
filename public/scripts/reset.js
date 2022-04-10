@@ -4,7 +4,9 @@ $(() => {
 
 	hideById('show-pass', 'show-pass-label');
 
-	showById('home-link', 'signup-link', 'login-link')
+	showById('home-link', 'signup-link', 'login-link');
+
+	forceNotLoggedIn();
 
 	// validate password and password verify upon each keyup
 	$('#password').on('keyup', () => {
