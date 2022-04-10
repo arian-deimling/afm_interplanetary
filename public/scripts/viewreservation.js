@@ -89,7 +89,7 @@ $(() => {
   let reservationView = new ReservationView($('#reservation_display'));
 
   $('form').css('width', '80%');
-	showById('home-link', 'about-link', 'logout-link', 'reservation-link');
+	showById('home-link', 'logout-link', 'reservation-link');
   loginCheck();
 
   // request user's reservations from the server

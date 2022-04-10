@@ -1,7 +1,6 @@
 'use strict';
 
 // TODO(AD) - fix indentation
-let passwordFields;
 $(() => {
   $('#logout-link').on('click', (e) => {
     e.preventDefault();
@@ -13,7 +12,7 @@ $(() => {
     }
     window.location.replace('/api/logout');
   });
-  passwordFields;
+  let passwordFields;
   $('#show-pass').on('change', () => {
     if (passwordFields === undefined) {
       passwordFields = $('input[type=password]');
@@ -25,6 +24,17 @@ $(() => {
       passwordFields.attr('type', 'password');
     }
   });
+  $('#show-pass-label').on('click', () => {
+    if (passwordFields === undefined) {
+      passwordFields = $('input[type=password]');
+    }
+    if ($('#show-pass').is(':checked')) {
+      passwordFields.attr('type', 'text');
+    } else {
+      passwordFields.attr('type', 'password');
+    }
+    $('#show-pass').attr('checked', !($('#show-pass').attr('checked')));
+  })
 })
 
 const locale = window.navigator.userLanguage || window.navigator.language;

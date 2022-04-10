@@ -209,7 +209,7 @@ $(() => {
 		getAndShowCapacity();
 	}
 
-	showById('home-link', 'about-link', 'logout-link', 'reservation-view-link');
+	showById('home-link', 'logout-link', 'reservation-view-link');
 
 	// check login every 5 sec and redirect to login
 	// page is user becomes logged out

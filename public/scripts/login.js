@@ -2,7 +2,7 @@
 
 $(() => {
 
-	showById('home-link', 'about-link', 'signup-link');
+	showById('home-link', 'signup-link');
 
 	// redirect the user if the user becomes logged in while viewing the page
 	redirectOnLogin();

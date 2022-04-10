@@ -4,7 +4,7 @@ $(() => {
 
 	hideById('show-pass', 'show-pass-label');
 
-	showById('home-link', 'about-link', 'signup-link', 'login-link')
+	showById('home-link', 'signup-link', 'login-link')
 
 	// validate password and password verify upon each keypress
 	$('#password').on('keyup', () => {
@@ -53,6 +53,8 @@ $(() => {
 					'security_question_id', 'security_question_answer', 'password',
 					'pass_verify', 'submit-reset', 'show-pass', 'show-pass-label'
 				);
+
+				$('#username').attr('readonly', 'readonly');
 
 			})
 			.fail(res => {

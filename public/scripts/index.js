@@ -17,10 +17,14 @@ $(() => {
   checkUserLoggedIn()
   .then((loggedIn) => {
     if (loggedIn) {
-      showById('reservation-view-link', 'reservation-link', 'logout-link');
+      if (window.location.pathname === '/') {
+        showById('reservation-view-link', 'reservation-link', 'logout-link');
+      }
       userLoggedIn = true;
     } else {
-      showById('login-link', 'signup-link');
+      if (window.location.pathname === '/') {
+        showById('login-link', 'signup-link');
+      }
       userLoggedIn = false;
     }
     // start checking login status periodically for changes

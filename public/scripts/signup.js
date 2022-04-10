@@ -2,7 +2,7 @@
 
 $(() => {
 
-  showById('home-link', 'about-link', 'login-link');
+  showById('home-link', 'login-link');
 
   // redirect the user if the user becomes logged in while viewing the page
   redirectOnLogin();
@@ -22,18 +22,24 @@ $(() => {
   xmlHttp.send(null);
 
   // validate username input
-  $('#username').on('keyup', () => {
-    checkUsername();
+  $('#username').on('keypress', (e) => {
+    if (e.key !== 'Enter') {
+      checkUsername();
+    }
   });
 
   // validate password input
   $('#password').on('keyup', () => {
-    checkPassword();
+    if (e.key !== 'Enter') {
+      checkPassword();
+    }
   });
 
   // validate confirm password input
   $('#pass_verify').on('keyup', () => {
-    checkPassVerify();
+    if (e.key !== 'Enter') {
+      checkPassVerify();
+    }
   });
 
   // validate security question input
@@ -43,7 +49,9 @@ $(() => {
 
   // validate security question answer
   $('#security_question_answer').on('keyup', () => {
-    checkSecurityQuestionAnswer();
+    if (e.key !== 'Enter') {
+      checkSecurityQuestionAnswer();
+    }
   });
 
   $('form').on('submit', (event) => {

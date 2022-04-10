@@ -12,3 +12,6 @@ cat <(find private public -type f -not -name '*.jpg' -not -name '*.ico' -not -pa
 
 Production:
 AD - enable minify
+
+Bug:
+curl -H 'Content-Type: application/json' -d '{"id": 3}' "http://localhost:8080/api/reservation/delete"
