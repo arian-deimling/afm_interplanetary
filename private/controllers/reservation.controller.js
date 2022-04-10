@@ -382,10 +382,7 @@ const deleteReservation = async (req, res) => {
 
   // make sure a reservation identifier was provided
   if (!req.body.id) {
-    res.status(400).send({
-      what: 'trip_date',
-      message: 'Trip date is required.',
-    });
+    res.status(400). send({ what: '', message: '', });
     return;
   }
 
