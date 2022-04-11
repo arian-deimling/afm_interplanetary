@@ -22,4 +22,4 @@ const seat = (sequelize, Sequelize) => {
   return Seat;
 };
 
-module.exports = seat;
+export default seat;

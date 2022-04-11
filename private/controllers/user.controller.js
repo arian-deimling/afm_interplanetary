@@ -1,12 +1,15 @@
 'use strict';
 
-const util = require('util');
-const bcrypt = require('bcrypt');
+import util from 'util';
+import bcrypt from 'bcrypt';
 
-const db = require('../models');
-const { saltRounds } = require('../config/hash.config');
-const { usernameRegex, passwordRegex, securityQuestionAnswerRegex } = 
-  require('../../public/scripts/config/validation.config');
+import db from '../models/index.js';
+import { saltRounds } from '../config/hash.config.js';
+import {
+  usernameRegex,
+  passwordRegex,
+  securityQuestionAnswerRegex
+} from '../../public/scripts/config/validation.config.js';
 
 const User = db.user;
 const SecurityQuestion = db.security_question;
@@ -423,7 +426,7 @@ const resetPassword = async (req, res) => {
   res.sendStatus(200);
 };
 
-const user_controller = {
+export default {
   login: login,
   create: create,
   checkLogin: checkLogin,
@@ -431,5 +434,3 @@ const user_controller = {
   findUser: findUser,
   resetPassword: resetPassword,
 };
-
-module.exports = user_controller;

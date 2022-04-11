@@ -2,7 +2,7 @@
 <html>
 <head>
   <%- include('./partials/_head_meta'); %>
-  <script src=/scripts/viewreservation.js></script>
+  <script type=module src=/scripts/viewreservation.js></script>
   <style>
     table,
     td,
@@ -43,7 +43,10 @@
           </table>
 
           <!-- message to display if no reservations exist for the user  -->
-          <div hidden id=no_reservation class=black-text>No reservations currently exist. <a href=/reservation>Create one?</a></div>
+          <div hidden id=no_reservation class=black-text>
+            No reservations currently exist.
+            <a href=/reservation>Create one?</a>
+          </div>
         </form>
       </div>
     </div>

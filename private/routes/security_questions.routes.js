@@ -1,9 +1,12 @@
 'use strict';
 
+import { Router } from 'express';
+
+import security_question_control from '../controllers/security_question.controller.js';
+
 const securityQuestionRoutes = app => {
 
-  const security_question_control = require('../controllers/security_question.controller');
-  let router = require('express').Router();
+  let router = Router();
 
   // get all security questions
   router.get('/security_questions', security_question_control.getQuestions);
@@ -12,4 +15,4 @@ const securityQuestionRoutes = app => {
   app.use('/api', router);
 };
 
-module.exports = securityQuestionRoutes;
+export default securityQuestionRoutes;

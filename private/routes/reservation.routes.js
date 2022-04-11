@@ -1,9 +1,12 @@
 'use strict';
 
+import { Router } from 'express';
+
+import reservationController from '../controllers/reservation.controller.js';
+
 const reservationRoutes = app => {
 
-  const reservationController = require('../controllers/reservation.controller');
-  let router = require('express').Router();
+  let router = Router();
 
   // get all trip dates
   router.get('/trip_dates', reservationController.getTripDates);
@@ -21,4 +24,4 @@ const reservationRoutes = app => {
   app.use('/api/reservation', router);
 };
 
-module.exports = reservationRoutes;
+export default reservationRoutes;

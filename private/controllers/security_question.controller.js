@@ -1,6 +1,6 @@
 'use strict';
 
-const db = require('../models');
+import db from '../models/index.js';
 
 const SecurityQuestion = db.security_question;
 
@@ -18,8 +18,6 @@ const getQuestions = async (_, res) => {
   res.status(200).send(securityQuestionQueryResult);
 };
 
-const security_question_controller = {
+export default {
   getQuestions: getQuestions,
-}
-
-module.exports = security_question_controller;
+};

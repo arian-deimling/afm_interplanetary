@@ -1,53 +1,60 @@
-'use strict';
+import {
+  PasswordInput,
+  UsernameInput,
+  checkValidities,
+  forceNotLoggedIn,
+  handleServerResponseMany,
+  passwordExistsValidity,
+  showById,
+  usernameExistsValidity
+} from './util.js';
+
+import { existsRegex } from './config/validation.config.js';
 
 $(() => {
 
-	const usernameInput = new UsernameInput(
-		$('#username_field_container'),
-		existsRegex,
-		'Username is required.'
-	);
+  const usernameInput = new UsernameInput(
+    $('#username_field_container'),
+    existsRegex,
+    usernameExistsValidity
+  );
 
-	const passwordInput = new PasswordInput(
-		$('#password_field_container'),
-		existsRegex,
-		'Password is required.'
-	);
+  const passwordInput = new PasswordInput(
+    $('#password_field_container'),
+    existsRegex,
+    passwordExistsValidity
+  );
 
-	showById('home-link', 'signup-link');
+  showById('home-link', 'signup-link');
 
-	// redirect the user if the user becomes logged in while viewing the page
-	forceNotLoggedIn();
+  // redirect the user if the user becomes logged in while viewing the page
+  forceNotLoggedIn();
 
-	$('form').on('submit', (event) => {
-		event.preventDefault();
+  $('form').on('submit', (event) => {
+    event.preventDefault();
 
-		// validate inputs
-		if (!usernameInput.checkValidity()) {
-			usernameInput.reportValidity();
-			return;
-		}
-		if (!passwordInput.checkValidity()) {
-			passwordInput.reportValidity();
-			return;
-		}
+    // validate inputs
+    const allValid = checkValidities(usernameInput, passwordInput);
+    if (!allValid) {
+      return;
+    }
 
+    $.post('/api/login', $('form').serialize(), () => {
+      // on success response, redirect to login page
+      window.location.replace('/');
 
-		$.post('/api/login', $('form').serialize(), (res) => {
-			// on success response, redirect to login page
-			window.location.replace('/');
-		})
-		// handle non-success response codes
-		.fail((res) => {
-			if (res.status == 400) {
-        if (usernameInput.handleServerResponse(res.responseJSON)) {
+    }).fail((res) => {
+      // handle non-success response codes
+      if (res.status === 400) {
+        const handled = handleServerResponseMany(
+          res.responseJSON,
+          usernameInput, passwordInput
+        );
+        if (handled) {
           return;
         }
-        if (passwordInput.handleServerResponse(res.responseJSON)) {
-          return;
-        }
-			}
-			window.location.replace('/500');
-		});
-	});
+      }
+      window.location.replace('/500');
+    });
+  });
 });

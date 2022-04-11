@@ -1,9 +1,12 @@
 'use strict';
 
+import { Router } from 'express';
+
+import user_controller from '../controllers/user.controller.js';
+
 const userRoutes = app => {
 
-  const user_controller = require('../controllers/user.controller');
-  let router = require('express').Router();
+  let router = Router();
 
   // create a new user
   router.post('/signup', user_controller.create);
@@ -27,4 +30,4 @@ const userRoutes = app => {
   app.use('/api', router);
 };
 
-module.exports = userRoutes;
+export default userRoutes;

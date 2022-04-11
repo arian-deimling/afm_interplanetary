@@ -1,7 +1,6 @@
 'use strict';
 
-// TODO(AD) - update DB info
-module.exports = {
+export default {
   HOST: 'localhost',
   PORT: 3306,
   USER: `${process.env.DB_USER}`,

@@ -31,4 +31,4 @@ const reservation = (sequelize, Sequelize) => {
   return Reservation;
 };
 
-module.exports = reservation;
+export default reservation;

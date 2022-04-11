@@ -1,15 +1,18 @@
-'use strict';
+import {
+  forceLoggedIn,
+  parseDateLocalTimezone,
+  showById
+} from './util.js';
 
 // handle click of delete button
 function deleteButton(anchor) {
-  $.post('/api/reservation/delete', {id: anchor.attr('value')}, (res) => {
+  $.post('/api/reservation/delete', { id: anchor.attr('value'), }, () => {
     anchor.parent().parent().remove();
     if ($('tbody tr').length === 0) {
       $('#reservation_display').attr('hidden', '');
       $('#no_reservation').removeAttr('hidden');
     }
-  })
-  .fail((res) => {
+  }).fail(() => {
     alert('Error: Unable to delete reservation.');
   });
 }
@@ -22,38 +25,38 @@ class ReservationView {
 
   add(reservation) {
     // unpack reservation data
-    const { id, num_passengers, createdAt, updatedAt, trip_date, seats } = reservation;
+    const { id, num_passengers, createdAt, trip_date, seats, } = reservation;
 
     // create a new row
     const row = $('<tr>');
-    let tableEntry;
 
     // add date table entry to the table
     let tripDate = parseDateLocalTimezone(trip_date);
-    tripDate = tripDate.toLocaleDateString('en-US', { dateStyle: 'full' });
-    tableEntry = $('<td>').html(tripDate);
+    tripDate = tripDate.toLocaleDateString('en-US', { dateStyle: 'full', });
+    let tableEntry = $('<td>').html(tripDate);
     row.append(tableEntry);
 
     // number of passengers and selected seats
     tableEntry = $('<td>').html(`${num_passengers}<hr>${seats.join(' ')}`);
     row.append(tableEntry);
-    
+
     // reservation creation datetime
     let timestamp = new Date(createdAt);
-    timestamp = timestamp.toLocaleString('en-US', { timeZoneName: 'short' })
+    timestamp = timestamp.toLocaleString('en-US', { timeZoneName: 'short', });
     timestamp = timestamp.replace(', ', '<br>');
     tableEntry = $('<td>').html(timestamp);
     row.append(tableEntry);
 
     // reservation modificiation datetime
     timestamp = new Date(createdAt);
-    timestamp = timestamp.toLocaleString('en-US', { timeZoneName: 'short' })
+    timestamp = timestamp.toLocaleString('en-US', { timeZoneName: 'short', });
     timestamp = timestamp.replace(', ', '<br>');
     tableEntry = $('<td>').html(timestamp);
     row.append(tableEntry);
 
     // reservation edit link
-    let link = $('<a>').attr('href', `/reservation?date=${trip_date}`).html('Edit');
+    let link = $('<a>').attr('href', `/reservation?date=${trip_date}`).
+      html('Edit');
     tableEntry = $('<td>').append(link);
     row.append(tableEntry);
 
@@ -72,7 +75,10 @@ class ReservationView {
 
   addAll(reservationArray) {
     reservationArray.sort((a, b) => {
-      return a.trip_date < b.trip_date ? -1 : 1;
+      if (a.trip_date < b.trip_date) {
+        return -1;
+      }
+      return 1;
     });
     for (const reservation of reservationArray) {
       this.add(reservation);
@@ -89,18 +95,18 @@ class ReservationView {
 }
 
 $(() => {
-  // create the reservation view 
-  let reservationView = new ReservationView($('#reservation_display'));
+  // create the reservation view
+  const reservationView = new ReservationView($('#reservation_display'));
 
   $('form').css('width', '80%');
-	showById('home-link', 'logout-link', 'reservation-link');
+  showById('home-link', 'logout-link', 'reservation-link');
   forceLoggedIn();
 
   // request user's reservations from the server
-  let xmlHttp = new XMLHttpRequest();
-  xmlHttp.addEventListener('load', (e) => {
+  const xmlHttp = new XMLHttpRequest();
+  xmlHttp.addEventListener('load', () => {
     if (xmlHttp.status === 200) {
-      // if there are no reservations for this user, only display 
+      // if there are no reservations for this user, only display
       // link to create a reservation
       if (xmlHttp.response.length === 0) {
         $('#no_reservation').removeAttr('hidden');
@@ -108,13 +114,13 @@ $(() => {
       }
       // if there are reservations add them to the reservation view
       reservationView.addAll(xmlHttp.response);
-      reservationView.show();        
+      reservationView.show();
     } else {
       window.location.replace('/500');
     }
   });
   xmlHttp.open('GET', '/api/reservation', true);
-	xmlHttp.responseType = 'json';
+  xmlHttp.responseType = 'json';
   xmlHttp.send(null);
 
 });

@@ -1,22 +1,32 @@
 'use strict';
 
-require('dotenv').config();
+import 'dotenv/config';
 
-const express = require('express');
-const path = require('path');
-const minify = require('express-minify');
-const session = require('express-session');
+import express from 'express';
+import path from 'path';
+import minify from 'express-minify';
+import session from 'express-session';
+import sessionSequelize from 'express-session-sequelize';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const db = require('./private/models/index');
-const sessionConfig = require('./private/config/session.config');
-const SessionStore = require('express-session-sequelize')(session.Store);
-const app = express();
+import db from './private/models/index.js';
+import sessionConfig from './private/config/session.config.js';
+import securityQuestionRoutes from './private/routes/security_questions.routes.js';
+import userRoutes from './private/routes/user.routes.js';
+import reservationRoutes from './private/routes/reservation.routes.js';
 
 const PORT = 8080;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const app = express();
+const SessionStore = sessionSequelize(session.Store);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, }));
 
+// TODO(AD)
 // app.use(minify());
 minify();
 
@@ -38,9 +48,9 @@ app.use(session({
 }));
 
 // api routes
-require('./private/routes/security_questions.routes')(app);
-require('./private/routes/user.routes')(app);
-require('./private/routes/reservation.routes')(app);
+securityQuestionRoutes(app);
+userRoutes(app);
+reservationRoutes(app);
 
 // serves static files
 app.use(express.static(path.join(__dirname, '/public')));

@@ -1,7 +1,8 @@
 'use strict';
 
-const sequelize = require('sequelize');
-const db = require('../models');
+import sequelize from 'sequelize';
+
+import db from '../models/index.js';
 
 const Trip = db.trip;
 const Reservation = db.reservation;
@@ -466,13 +467,11 @@ const getSeats = async (req, res) => {
   });
 }
 
-const reservationController = {
+export default {
   getTripDates: getTripDates,
   getRemainingCapacity: getRemainingCapacity,
   create: create,
   allReservations: allReservations,
   deleteReservation: deleteReservation,
   getSeats: getSeats,
-}
-
-module.exports = reservationController;
+};

@@ -36,4 +36,4 @@ const user = (sequelize, Sequelize) => {
   return User;
 };
 
-module.exports = user;
+export default user;

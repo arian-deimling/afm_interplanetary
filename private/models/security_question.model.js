@@ -27,4 +27,4 @@ const security_question = (sequelize, Sequelize) => {
   return SecurityQuestion;
 };
 
-module.exports = security_question;
+export default security_question;

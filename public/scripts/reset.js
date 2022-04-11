@@ -1,121 +1,150 @@
-'use strict';
+import {
+  PasswordConfirmInput,
+  PasswordInput,
+  SecurityQuestionAnswerInput,
+  SecurityQuestionInput,
+  UsernameInput,
+  checkValidities,
+  forceNotLoggedIn,
+  handleServerResponseMany,
+  hideById,
+  passwordConfirmValidity,
+  passwordValidity,
+  securityQuestionAnswerExistsValidity,
+  securityQuestionValidity,
+  showById,
+  usernameExistsValidity
+} from './util.js';
+
+import {
+  existsRegex,
+  passwordRegex,
+  securityQuestionAnswerRegex
+} from './config/validation.config.js';
 
 $(() => {
 
   const usernameInput = new UsernameInput(
-		$('#username_field_container'),
-		existsRegex,
-    'Username is required.'
+    $('#username_field_container'),
+    existsRegex, usernameExistsValidity
   );
 
-	const passwordInput = new PasswordInput(
-		$('#password_field_container'),
-		passwordRegex,
-    'Password must be between 8 and 20 characters and contain one uppercase'
-    + ' letter, one lowercase letter, one numner, and no special characters.'
+  const passwordInput = new PasswordInput(
+    $('#password_field_container'),
+    passwordRegex, passwordValidity
   );
-	passwordInput.hide();
 
   const passwordConfirmInput = new PasswordConfirmInput(
-    $('#password_confirm_field_container'),
-    passwordInput,
-    'Password confirmation must match passsword.'
+    $('#password_confirm_field_container'), passwordInput,
+    passwordConfirmValidity
   );
-	passwordConfirmInput.hide();
 
   const securityQuestionInput = new SecurityQuestionInput(
-    $('#security_question_container'),
-    'Select a security question...',
-    'You must select a security question.'
+    $('#security_question_container'), 'Select a security question...',
+    securityQuestionValidity
   );
-	securityQuestionInput.hide();
-  
+
   const securityQuestionAnswerInput = new SecurityQuestionAnswerInput(
-    $('#security_question_answer_container'),
-    securityQuestionAnswerRegex,
-    'Security Question Answer must be between 1 and 99 characters.',
+    $('#security_question_answer_container'), securityQuestionAnswerRegex,
+    securityQuestionAnswerExistsValidity
   );
-	securityQuestionAnswerInput.hide();
 
-	hideById('show-pass', 'show-pass-label');
+  passwordInput.hide();
+  passwordConfirmInput.hide();
+  securityQuestionInput.hide();
+  securityQuestionAnswerInput.hide();
 
-	showById('home-link', 'signup-link', 'login-link');
+  hideById('show-pass', 'show-pass-label');
+  showById('home-link', 'signup-link', 'login-link');
 
-	forceNotLoggedIn();
+  forceNotLoggedIn();
 
-	$('form').on('submit', (event) => {
-		event.preventDefault();
+  $('form').on('submit', (event) => {
+    event.preventDefault();
 
-		// if we are at the stage of retrieving the security question for this user
-		if (!($('#submit-user').attr('hidden'))) {
+    // if we are at the stage of retrieving the security question for this user
+    if (!$('#submit-user').attr('hidden')) {
+      handleSubmitUsername(
+        usernameInput, passwordInput, passwordConfirmInput,
+        securityQuestionInput, securityQuestionAnswerInput
+      );
+    }
 
-			if (!usernameInput.checkValidity()) {
-				usernameInput.reportValidity();
-				return;
-			}
-					
-			// find the user
-			$.post('/api/finduser', $('form').serialize(), res => {
-
-				// hide old submit button
-				hideById('submit-user');
-
-				// set security question
-				$('select > option').attr('value', `${res.security_question_id}`);
-				$('select > option').html(res.security_question);
-				$('select').attr('disabled', 'true');
-
-				passwordInput.show();
-				passwordConfirmInput.show();
-				securityQuestionInput.show();
-				securityQuestionAnswerInput.show();
-				showById('show-pass', 'show-pass-label', 'submit-reset');
-
-				$('input[name=username]').attr('readonly', 'readonly');
-
-			})
-			.fail(res => {
-				if (res.status === 400) {
-					if (usernameInput.handleServerResponse(res.responseJSON)) {
-						return;
-					}
-				}
-				window.location.replace('/500')
-			});
-		}
-
-		// if we are at the stage of resetting the password for this user		
-		if (!($('#submit-reset').attr('hidden'))) {
-
-			if (!passwordInput.checkValidity()) {
-				passwordInput.reportValidity();
-				return;
-			}
-			if (!passwordConfirmInput.checkValidity()) {
-				passwordConfirmInput.reportValidity();
-				return;
-			}
-			if (!securityQuestionAnswerInput.checkValidity()) {
-				securityQuestionAnswerInput.reportValidity();
-				return;
-			}
-
-			$.post('/api/reset', $('form').serialize(), res => {
-				// on success response, redirect to login page
-				window.location.replace('/login');
-			})
-			.fail((res, status, err) => {
-				if (passwordInput.handleServerResponse(res.responseJSON)) {
-					return;
-				}
-				if (passwordConfirmInput.handleServerResponse(res.responseJSON)) {
-					return;
-				}
-				if (securityQuestionAnswerInput.handleServerResponse(res.responseJSON)) {
-					return;
-				}
-				window.location.replace('/500')
-			});
-		}
-	});
+    // if we are at the stage of resetting the password for this user
+    if (!$('#submit-reset').attr('hidden')) {
+      handleSubmitReset(
+        passwordInput, passwordConfirmInput,
+        securityQuestionAnswerInput
+      );
+    }
+  });
 });
+
+function handleSubmitUsername(
+  usernameInput, passwordInput,
+  passwordConfirmInput, securityQuestionInput,
+  securityQuestionAnswerInput
+) {
+
+  if (!usernameInput.checkValidity()) {
+    usernameInput.reportValidity();
+    return;
+  }
+
+  // find the user
+  $.post('/api/finduser', $('form').serialize(), (res) => {
+
+    // hide old submit button
+    hideById('submit-user');
+
+    // set security question
+    $('select > option').attr('value', `${res.security_question_id}`);
+    $('select > option').html(res.security_question);
+    $('select').attr('disabled', 'true');
+
+    passwordInput.show();
+    passwordConfirmInput.show();
+    securityQuestionInput.show();
+    securityQuestionAnswerInput.show();
+    showById('show-pass', 'show-pass-label', 'submit-reset');
+
+    $('input[name=username]').attr('readonly', 'readonly');
+
+  }).fail((res) => {
+    if (res.status === 400) {
+      if (usernameInput.handleServerResponse(res.responseJSON)) {
+        return;
+      }
+    }
+    window.location.replace('/500');
+  });
+}
+
+function handleSubmitReset(
+  passwordInput, passwordConfirmInput,
+  securityQuestionAnswerInput
+) {
+
+  // validate inputs
+  const allValid = checkValidities(
+    passwordInput, passwordConfirmInput,
+    securityQuestionAnswerInput
+  );
+  if (!allValid) {
+    return;
+  }
+
+  $.post('/api/reset', $('form').serialize(), () => {
+    // on success response, redirect to login page
+    window.location.replace('/login');
+  }).fail((res) => {
+    const handledResponse = handleServerResponseMany(
+      res.responseJSON,
+      passwordInput, passwordConfirmInput, securityQuestionAnswerInput
+    );
+    if (handledResponse) {
+      return;
+    }
+    window.location.replace('/500');
+  });
+}

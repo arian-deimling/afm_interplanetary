@@ -28,4 +28,4 @@ const trip = (sequelize, Sequelize) => {
   return Trip;
 };
 
-module.exports = trip;
+export default trip;

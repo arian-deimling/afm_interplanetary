@@ -1,5 +1,6 @@
 {
   "name": "afm_interplanetary",
+  "type": "module",
   "version": "1.0.0",
   "description": "Website for AFM Interplanetary",
   "main": "server.js",

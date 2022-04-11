@@ -1,7 +1,13 @@
 'use strict';
 
-const dbConfig = require('../config/db.config');
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+
+import dbConfig from '../config/db.config.js';
+import user from './user.model.js';
+import security_question from './security_question.model.js';
+import trip from './trip.model.js';
+import reservation from './reservation.model.js';
+import seat from './seat.model.js';
 
 const db = {};
 db.connection = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
@@ -16,11 +22,11 @@ db.connection = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   }
 });
 
-const User = require('./user.model')(db.connection, Sequelize);
-const SecurityQuestion = require('./security_question.model')(db.connection, Sequelize);
-const Trip = require('./trip.model')(db.connection, Sequelize);
-const Reservation = require('./reservation.model')(db.connection, Sequelize);
-const Seat = require('./seat.model')(db.connection, Sequelize);
+const User = user(db.connection, Sequelize);
+const SecurityQuestion = security_question(db.connection, Sequelize);
+const Trip = trip(db.connection, Sequelize);
+const Reservation = reservation(db.connection, Sequelize);
+const Seat = seat(db.connection, Sequelize);
 
 // define table relationships
 SecurityQuestion.hasMany(User, {foreignKey: 'security_question_id'});
@@ -114,4 +120,4 @@ db.trip.sync().then(async () => {
   }
 });
 
-module.exports = db;
+export default db;

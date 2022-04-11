@@ -2,19 +2,20 @@
 
 ## Setup
 
-### npm
+### Node.js
 
-1. Download Node.js from [`https://nodejs.org/en/download/`](https://nodejs.org/en/download/).
-2. Make sure Node.js is added to your PATH environment variable.
-   * The command `npm --version` should print out the verison of Node.js that you just installed. 
+1. Download Node.js from [`https://nodejs.org/en/download/`](https://nodejs.org/en/download/); by default the installer will add Node.js to your PATH environment variable.
+2. If successful, the command `npm --version` should output the version of Node.js that you installed.
 
-### mysql
+### MySQL Community Server
 
-1. Download mysql from [`https://dev.mysql.com/downloads/mysql/`](https://dev.mysql.com/downloads/mysql/).
-2. Make sure mysql is added to your PATH environment variable.
-   * The command `mysql --version` should print out the verison of mysql that you just installed. 
+1. Download and install MySql Community Server and add it to PATH environment variable.
+   * [Here is a guide](https://overiq.com/installing-mysql-windows-linux-and-mac/) for Windows, macOS, and some Linux distributions.
+2. If successful, the command `mysql --version` should output the version of mysql that you installed.
 
 ### Demo
+
+#### macOS / Linux
 
 1. Make the demo setup script executable with the following command in the main project directory:
 ```sh
