@@ -22,14 +22,15 @@
           <h2 class=no-margin-top>Reset Password</h2>
 
           <!-- initial form fields -->
-          <input          id=username                 type=text     name=username                 placeholder=Username>
+          <!-- <input          id=username                 type=text     name=username                 placeholder=Username> -->
+          <span id=username_field_container></span>
           <input          id=submit-user              type=submit   name=submit-user              value=Submit on>
 
           <!-- initially hidden form fields -->
-          <select hidden  id=security_question_id                   name=security_question_id     disabled><option value=0></option></select>
-          <input  hidden  id=security_question_answer type=text     name=security_question_answer placeholder='Security Question Answer'>
-          <input  hidden  id=password                 type=password name=password                 placeholder='Choose New Password'>
-          <input  hidden  id=pass_verify              type=password name=pass_verify              placeholder='Confirm New Password'>
+          <span id=security_question_container></span>
+          <span id=security_question_answer_container></span>
+          <span id=password_field_container></span>
+          <span id=password_confirm_field_container></span>
           <%- include('./partials/_show_pass'); %> 
           <input  hidden  id=submit-reset             type=submit   name=submit-reset             value='Reset Password' on>  
         </form>

@@ -2,36 +2,37 @@
 
 $(() => {
 
+	const usernameInput = new UsernameInput(
+		$('#username_field_container'),
+		existsRegex,
+		'Username is required.'
+	);
+
+	const passwordInput = new PasswordInput(
+		$('#password_field_container'),
+		existsRegex,
+		'Password is required.'
+	);
+
 	showById('home-link', 'signup-link');
 
 	// redirect the user if the user becomes logged in while viewing the page
 	forceNotLoggedIn();
 
-  $('#username').on('keyup', (e) => {
-		if (e.key === 'Enter') {
-			$('form').trigger('submit');
-			return;
-		}
-    $('#username')[0].setCustomValidity('');
-    $('#username')[0].reportValidity();
-  });
-
-  $('#password').on('keyup', (e) => {
-		if (e.key === 'Enter') {
-			$('form').trigger('submit');
-			return;
-		}
-    $('#password')[0].setCustomValidity('');
-    $('#password')[0].reportValidity();
-  });
-
 	$('form').on('submit', (event) => {
 		event.preventDefault();
 
-		if (!checkUsernameExists() || !checkPasswordExists) {
+		// validate inputs
+		if (!usernameInput.checkValidity()) {
+			usernameInput.reportValidity();
 			return;
 		}
-		
+		if (!passwordInput.checkValidity()) {
+			passwordInput.reportValidity();
+			return;
+		}
+
+
 		$.post('/api/login', $('form').serialize(), (res) => {
 			// on success response, redirect to login page
 			window.location.replace('/');
@@ -39,9 +40,12 @@ $(() => {
 		// handle non-success response codes
 		.fail((res) => {
 			if (res.status == 400) {
-        $(`#${res.responseJSON.what}`)[0].setCustomValidity(res.responseJSON.message);
-        $(`#${res.responseJSON.what}`)[0].reportValidity();
-				return;
+        if (usernameInput.handleServerResponse(res.responseJSON)) {
+          return;
+        }
+        if (passwordInput.handleServerResponse(res.responseJSON)) {
+          return;
+        }
 			}
 			window.location.replace('/500');
 		});

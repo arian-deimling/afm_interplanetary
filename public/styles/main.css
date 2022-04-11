@@ -54,6 +54,7 @@ form input[type=text], input[type=submit], input[type=password], select {
     border-bottom-color: black;
     border-bottom-width: 2px;
     background: #f2f2f2;
+    width: -webkit-fill-available;
 }
 
 form label {
