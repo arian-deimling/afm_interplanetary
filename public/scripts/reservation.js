@@ -299,6 +299,7 @@ $(() => {
 						maxDate: maxDate,
 						onSelect: _ => {
 							getAndShowCapacity();
+							$('input[type=submit]').removeAttr('hidden');
 						},
 					});
 				}

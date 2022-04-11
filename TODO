@@ -6,6 +6,7 @@ Any - update about page text
 Any - update Interface Document w/ events that prompt the website to do something
 Any - remove all client-side console.log()
 Any - add 'use strict'; to all js code
+Any - add project documentation PDF to ./public/documentation after completion
 
 LINE_COUNT:
 cat <(find private public -type f -not -name '*.jpg' -not -name '*.ico' -not -path '*/lib/*' -not -path '*/resources/*')  <(echo -e '.gitignore\nREADME.md\nserver.js\nTODO') | xargs wc 
