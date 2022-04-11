@@ -7,7 +7,42 @@ const securityQuestionFieldName = 'security_question_id';
 const securityQuestionAnswerFieldName = 'security_question_answer';
 
 class Input {
+  // unhide this input field
+  show() {
+    this.field.removeAttr('hidden');
+  }
+
+  // hide this input field
+  hide() {
+    this.field.attr('hidden', '');
+  }
+
+  // display validity message
+	reportValidity() {
+		if (arguments.length > 0) {
+			this.field[0].setCustomValidity(arguments[0]);
+		}
+		this.field[0].reportValidity();
+	}
+
+  // display validation message and return true if the server response indicates
+  // this input field is invalid; otherwise, return false
+  handleServerResponse(responseJson) {
+    if (responseJson.what === this.name) {
+      this.reportValidity(responseJson.message);
+    }
+    return responseJson.what === this.name;
+  }
+
+  // return the value of this field
+  get val() {
+    return this.field.val();
+  }
+}
+
+class TextBasedInput extends Input {
 	constructor(parent, type, name, placeholder, validationRegex, validationMessage) {
+    super();
     this.name = name;
 		this.field = $('<input>').attr('type', type).attr('name', name)
       .attr('placeholder', placeholder);
@@ -39,44 +74,18 @@ class Input {
 		this.field[0].setCustomValidity('');
 		return true;
 	}
-
-	// display validity message
-	reportValidity() {
-		if (arguments.length > 0) {
-			this.field[0].setCustomValidity(arguments[0]);
-		}
-		this.field[0].reportValidity();
-	}
-  
-  show() {
-    this.field.removeAttr('hidden');
-  }
-
-  hide() {
-    this.field.attr('hidden', '');
-  }
-
-  handleServerResponse(responseJson) {
-    if (responseJson.what === this.name) {
-      this.reportValidity(responseJson.message);
-    }
-    return responseJson.what === this.name;
-  } 
-
-  get val() {
-    return this.field.val();
-  }
 }
 
-class UsernameInput extends Input {
+class UsernameInput extends TextBasedInput {
 	constructor(parent, validationRegex, validationMessage) {
 		super(parent, 'text', usernameFieldName, 'Username', validationRegex,
       validationMessage);
 	}
 }
 
-class SecurityQuestionInput {
+class SecurityQuestionInput extends Input {
 	constructor(parent, placeholder, validationMessage) {
+    super();
 		this.field = $('<select>').attr('name', securityQuestionFieldName)
       .attr('placeholder', placeholder);
     this.field.append($('<option>').attr('value', 0).html(placeholder));
@@ -105,50 +114,23 @@ class SecurityQuestionInput {
 		this.field[0].setCustomValidity('');
 		return true;
 	}
-
-	// display validity message
-	reportValidity() {
-		if (arguments.length > 0) {
-			this.field[0].setCustomValidity(arguments[0]);
-		}
-		this.field[0].reportValidity();
-	}
-
-  show() {
-    this.field.removeAttr('hidden');
-  }
-
-  hide() {
-    this.field.attr('hidden', '');
-  }
-
-  handleServerResponse(responseJson) {
-    if (responseJson.what === this.name) {
-      this.reportValidity(responseJson.message);
-    }
-    return responseJson.what === this.name;
-  } 
-
-  get val() {
-    return this.field.val();
-  }
 }
 
-class PasswordInput extends Input {
+class PasswordInput extends TextBasedInput {
 	constructor(parent, validationRegex, validationMessage) {
 		super(parent, 'password', passwordFieldName, 'Password', validationRegex,
       validationMessage);
 	}
 }
 
-class SecurityQuestionAnswerInput extends Input {
+class SecurityQuestionAnswerInput extends TextBasedInput {
   constructor(parent, validationRegex, validationMessage) {
     super(parent, 'text', securityQuestionAnswerFieldName,
       'Security Question Answer', validationRegex, validationMessage);
   }
 }
 
-class PasswordConfirmInput extends Input {
+class PasswordConfirmInput extends TextBasedInput {
 	constructor(parent, passwordInput, validationMessage) {
 		super(parent, 'password', passwordConfirmFieldName, 'Confirm Password',
       /^.*$/, validationMessage);
