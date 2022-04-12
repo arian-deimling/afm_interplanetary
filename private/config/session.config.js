@@ -1,6 +1,11 @@
-'use strict';
-
-const twoHours = 2 * (1000 /* ms per second */ * 60 /* seconds per minute */ * 60 /* minutes per hour */);
+const twoHours = 2 * (
+  /* ms per second */
+  1000 *
+  /* seconds per minute */
+  60 *
+  /* minutes per hour */
+  60
+);
 
 export default {
   secret: `${process.env.SESSION_SECRET}`,
