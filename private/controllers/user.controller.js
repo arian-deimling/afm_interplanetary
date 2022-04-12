@@ -555,6 +555,25 @@ async function getQuestions(req, res) {
   }
 }
 
+/**
+ * Ensure that the user is logged in.
+ *
+ * Prerequisite(s): `none`
+ *
+ * @param {Request} req request that is currently being used
+ * @param {Response} res response that is currently being used
+ */
+function validateLoggedIn(req, res, next) {
+  if (req.session.userID) {
+    next();
+    return;
+  }
+  res.status(400).send({
+    what: 'login_status',
+    message: 'You must be logged in to perform this action.',
+  });
+}
+
 export default {
   login,
   create,
@@ -578,4 +597,5 @@ export default {
   hashSecurityQuestionAnswer,
   validateSecurityQuestionAnswerMatches,
   getQuestions,
+  validateLoggedIn,
 };

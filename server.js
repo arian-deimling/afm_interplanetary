@@ -1,22 +1,23 @@
-'use strict';
-
 import 'dotenv/config';
 
-import express from 'express';
-import path from 'path';
-import minify from 'express-minify';
-import session from 'express-session';
-import sessionSequelize from 'express-session-sequelize';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, path } from 'path';
 
 import db from './private/models/index.js';
-import sessionConfig from './private/config/session.config.js';
-import userRoutes from './private/routes/user.routes.js';
+import express from 'express';
+import { fileURLToPath } from 'url';
+import minify from 'express-minify';
+// import path from 'path';
 import reservationRoutes from './private/routes/reservation.routes.js';
+import session from 'express-session';
+import sessionConfig from './private/config/session.config.js';
+import sessionSequelize from 'express-session-sequelize';
+import userRoutes from './private/routes/user.routes.js';
+
 
 const PORT = 8080;
+// eslint-disable-next-line no-underscore-dangle
 const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line no-underscore-dangle
 const __dirname = dirname(__filename);
 
 const app = express();
@@ -25,7 +26,6 @@ const SessionStore = sessionSequelize(session.Store);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, }));
 
-// TODO(AD)
 // app.use(minify());
 minify();
 
@@ -54,13 +54,15 @@ reservationRoutes(app);
 app.use(express.static(path.join(__dirname, '/public')));
 
 // page aliases redirect only
-app.get([ '/index', '/index.html', ], (req, res) => res.redirect('/'));
+app.get([ '/index', '/index.html', ], (_, res) => res.redirect('/'));
 app.get('/about.html', (_, res) => res.redirect('/about'));
 app.get('/signup.html', (_, res) => res.redirect('/signup'));
 app.get('/login.html', (_, res) => res.redirect('/login'));
 app.get('/reset.html', (_, res) => res.redirect('/reset'));
 app.get('/reservation.html', (_, res) => res.redirect('/reservation'));
-app.get('/reservation/view.html', (_, res) => res.redirect('/reservation/view'));
+app.get('/reservation/view.html', (_, res) => {
+  res.redirect('/reservation/view');
+});
 
 // serve pages
 app.get('/', (req, res) => {
@@ -111,7 +113,7 @@ app.get('/reservation/view', (req, res) => {
 });
 app.get('/500', (req, res) => {
   res.status(500).render('500');
-})
+});
 app.use((req, res) => {
   res.status(404).render('404');
 });
