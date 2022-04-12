@@ -285,7 +285,7 @@ $(() => {
     for (let i = 1; i <= maxIntervalId; i++) {
       window.clearInterval(i);
     }
-    window.location.replace('/api/logout');
+    window.location.replace('/api/user/logout');
   });
   let passwordFields = null;
   $('#show-pass').on('change', () => {
@@ -339,7 +339,7 @@ function showById(...args) {
 function checkUserLoggedIn() {
   return new Promise((resolve, reject) => {
     const xmlHttp = new XMLHttpRequest();
-    xmlHttp.open('GET', '/api/login');
+    xmlHttp.open('GET', '/api/user/login');
     xmlHttp.onload = () => {
       if (xmlHttp.status === 200) {
         resolve(true);

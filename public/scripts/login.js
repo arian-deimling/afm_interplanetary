@@ -39,7 +39,7 @@ $(() => {
       return;
     }
 
-    $.post('/api/login', $('form').serialize(), () => {
+    $.post('/api/user/login', $('form').serialize(), () => {
       // on success response, redirect to login page
       window.location.replace('/');
 

@@ -92,7 +92,7 @@ function handleSubmitUsername(
   }
 
   // find the user
-  $.post('/api/finduser', $('form').serialize(), (res) => {
+  $.post('/api/user/find', $('form').serialize(), (res) => {
 
     // hide old submit button
     hideById('submit-user');
@@ -134,7 +134,7 @@ function handleSubmitReset(
     return;
   }
 
-  $.post('/api/reset', $('form').serialize(), () => {
+  $.post('/api/user/reset', $('form').serialize(), () => {
     // on success response, redirect to login page
     window.location.replace('/login');
   }).fail((res) => {

@@ -69,7 +69,7 @@ $(() => {
     }
     window.location.replace('/500');
   };
-  xmlHttp.open('GET', '/api/security_questions', true);
+  xmlHttp.open('GET', '/api/user/security_questions', true);
   xmlHttp.responseType = 'json';
   xmlHttp.send(null);
 
@@ -86,7 +86,7 @@ $(() => {
       return;
     }
 
-    $.post('/api/signup', $('form').serialize(), () => {
+    $.post('/api/user/signup', $('form').serialize(), () => {
       // on success response, redirect to login page
       window.location.replace('/login');
 

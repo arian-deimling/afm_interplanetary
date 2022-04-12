@@ -12,7 +12,6 @@ import { dirname } from 'path';
 
 import db from './private/models/index.js';
 import sessionConfig from './private/config/session.config.js';
-import securityQuestionRoutes from './private/routes/security_questions.routes.js';
 import userRoutes from './private/routes/user.routes.js';
 import reservationRoutes from './private/routes/reservation.routes.js';
 
@@ -48,7 +47,6 @@ app.use(session({
 }));
 
 // api routes
-securityQuestionRoutes(app);
 userRoutes(app);
 reservationRoutes(app);
 
