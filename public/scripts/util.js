@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+
 const usernameFieldName = 'username';
 const passwordFieldName = 'password';
 const passwordConfirmFieldName = 'pass_verify';
@@ -173,6 +175,9 @@ class PasswordConfirmInput extends TextBasedInput {
 
 class SeatSelection {
   constructor(container) {
+    this.updateCallback = null;
+    this.userSeats = null;
+    this.otherSeats = null;
     this.seatIds = [
       'A1', 'A2', 'A3', 'A4',
       'B1', 'B2', 'B3', 'B4',
@@ -237,40 +242,60 @@ class SeatSelection {
     this.container.css('display', 'none');
   }
 
-  update() {
+  async update() {
     // validate trip date input
     if (!checkTripDate()) {
       return;
     }
     // reset all seats to default unchecked and enabled
     for (const seatId of this.seatIds) {
-      $(`#${seatId}`).removeAttr('checked');
       $(`#${seatId}`).removeAttr('disabled');
+      $(`#${seatId}`).prop('checked', false);
     }
     // request seating information for this trip from the server
-    $.post('/api/reservation/seats', $('form').serialize(), (res) => {
-      console.log(res);
+    await $.post('/api/reservation/seats', $('form').serialize(), (res) => {
+      this.userSeats = res.userSeats;
+      this.otherSeats = res.otherSeats;
+
       for (const userSeatId of res.userSeats) {
-        $(`#${userSeatId}`).attr('checked', 'true');
+        $(`#${userSeatId}`).prop('checked', true);
       }
       for (const unavailableSeatId of res.otherSeats) {
         $(`#${unavailableSeatId}`).attr('disabled', 'true');
+
       }
-    }).
-      fail((res) => {
-        // if login status error occurs, notify user and redirect to login page
-        if (res.status === 400 && res.responseJSON.what === 'trip_date') {
-          getAndShowCapacity();
-          return;
-        }
-        if (res.status === 400) {
-          $(`#${res.responseJSON.what}`)[0].
-            setCustomValidity(res.responseJSON.message);
-          $(`#${res.responseJSON.what}`)[0].reportValidity();
-          return;
-        }
-        window.location.replace('/500');
-      });
+    }).fail((res) => {
+      if (res.status === 400 && res.responseJSON.what === 'login_status') {
+        window.location.replace('/login');
+        return;
+      }
+      if (res.status === 400 && res.responseJSON.what === 'seat_selection') {
+        $('input[type=submit]')[0].setCustomValidity(res.responseJSON.message);
+        $('input[type=submit]')[0].reportValidity();
+        setTimeout(() => {
+          $('input[type=submit]')[0].setCustomValidity('');
+          $('input[type=submit]')[0].reportValidity();
+        }, 1500);
+        return;
+      }
+      if (res.status === 400) {
+        $(`#${res.responseJSON.what}`)[0].
+          setCustomValidity(res.responseJSON.message);
+        $(`#${res.responseJSON.what}`)[0].reportValidity();
+        return;
+      }
+      window.location.replace('/500');
+    });
+    // call the callback if we have a valid callback and inputs
+    const callCallback = this.updateCallback !== null &&
+      this.userSeats !== null && this.otherSeats !== null;
+    if (callCallback) {
+      this.updateCallback(this.userSeats, this.otherSeats);
+    }
+  }
+
+  onupdate(callback) {
+    this.updateCallback = callback;
   }
 }
 
@@ -312,7 +337,7 @@ $(() => {
 });
 
 const locale = window.navigator.userLanguage || window.navigator.language;
-const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const timezone = new Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 function parseDateLocalTimezone(date) {
   date = new Date(date);

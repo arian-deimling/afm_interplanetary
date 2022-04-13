@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+
 import {
   SeatSelection,
   checkNumPassengers,
@@ -57,10 +59,14 @@ function checkSeats() {
   return selectedSeats.length === Number(numPassengers.value);
 }
 
-function getAndShowCapacity() {
-  $.post('/api/reservation/capacity', $('form').serialize(), (res) => {
-    // calculate total number of seats user can select
-    const capacity = res.remaining_capacity + res.currentReservedSeats;
+let seatSelection = null;
+
+$(() => {
+
+  seatSelection = new SeatSelection($('#seat_selection_container'));
+  seatSelection.onupdate((userSeats, otherSeats) => {
+    // hardcoded but shouldn't be if we introduce trips of capacity g.t. 12
+    const capacity = 12 - otherSeats.length;
 
     // empty the passenger selection element and add a default value
     $('#num_passengers').empty();
@@ -72,42 +78,21 @@ function getAndShowCapacity() {
       $('#num_passengers').append($('<option>').prop('value', `${i}`).
         html(`${i}`));
     }
-
     // if the user already has a reservation for this trip
-    if (res.currentReservedSeats) {
+    if (userSeats.length > 0) {
       // set the selection value to current number of passengers for the user
-      $(`option[value=${res.currentReservedSeats}]`).attr('selected', true);
-      handlePassengerSelectChange();
+      $(`option[value=${userSeats.length}]`).attr('selected', true);
       showById('editing_msg');
       $('h2').html('Edit Reservation');
       $(':submit').attr('value', 'Modify');
     } else {
-      handlePassengerSelectChange();
       $('h2').html('New Reservation');
       $(':submit').attr('value', 'Submit');
       hideById('editing_msg');
     }
 
-    seatSelection.update();
-    seatSelection.show();
-    showById('num_passengers');
-  }).
-    fail((res) => {
-      if (res.status === 400) {
-        $(`#${res.responseJSON.what}`)[0].
-          setCustomValidity(res.responseJSON.message);
-        $(`#${res.responseJSON.what}`)[0].reportValidity();
-        return;
-      }
-      window.location.replace('/500');
-    });
-}
-
-let seatSelection = null;
-
-$(() => {
-
-  seatSelection = new SeatSelection($('#seat_selection_container'));
+    handlePassengerSelectChange();
+  });
 
   // if a reservation was selected via query params autofill date
   // and disable date selection
@@ -117,7 +102,10 @@ $(() => {
     $('#trip_date').val(`${date.split('-')[1]}/${date.split('-')[2]}/` +
       `${date.split('-')[0]}`);
     $('#trip_date').attr('readonly', 'readonly');
-    getAndShowCapacity();
+    seatSelection.update();
+    seatSelection.show();
+    $('input[type=submit]').removeAttr('hidden');
+    $('#num_passengers').removeAttr('hidden');
   }
 
   showById('home-link', 'logout-link', 'reservation-view-link');
@@ -156,7 +144,6 @@ $(() => {
       // on success response, redirect to view reservation page
       window.location.replace('/reservation/view');
     }).fail((res) => {
-      console.log(res);
       // if login status error occurs, notify user and redirect to login page
       if (res.status === 400 && res.responseJSON.what === 'login_status') {
         alert('Your session has expired. Please log in again to continue!');
@@ -164,7 +151,7 @@ $(() => {
         return;
       }
       if (res.status === 400 && res.responseJSON.what === 'num_passengers') {
-        getAndShowCapacity();
+        seatSelection.update();
         return;
       }
       if (res.status === 400) {
@@ -212,8 +199,10 @@ $(() => {
             minDate,
             maxDate,
             onSelect: () => {
-              getAndShowCapacity();
+              seatSelection.update();
+              seatSelection.show();
               $('input[type=submit]').removeAttr('hidden');
+              $('#num_passengers').removeAttr('hidden');
             },
           });
         }

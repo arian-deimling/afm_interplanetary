@@ -1,25 +1,84 @@
-'use strict';
+import {
+  create,
+  deleteReservation,
+  getAllReservationsInfo,
+  getAllTrips,
+  getAllUserReservations,
+  getAllUserSeats,
+  getAtCapacityTrips,
+  getAvailableTripDates,
+  getOtherSeats,
+  getSeats,
+  getSeatsByTrip,
+  getUserSeats,
+  getUserTrips,
+  validateReservationIdExists,
+  validateReservationOwnership,
+  validateSeatSelection,
+  validateTripDateExists,
+  validateTripDateIsValid
+} from '../controllers/reservation.controller.js';
 
 import { Router } from 'express';
+import { validateLoggedIn } from '../controllers/user.controller.js';
 
-import reservationController from '../controllers/reservation.controller.js';
+const reservationRoutes = (app) => {
 
-const reservationRoutes = app => {
+  const router = new Router();
 
-  let router = Router();
+  // get all available trip dates
+  router.get(
+    '/trip_dates',
+    validateLoggedIn,
+    getAllTrips,
+    getAtCapacityTrips,
+    getUserTrips,
+    getAvailableTripDates
+  );
 
-  // get all trip dates
-  router.get('/trip_dates', reservationController.getTripDates);
+  // create new reservation for the current user
+  router.post(
+    '/create',
+    validateLoggedIn,
+    validateTripDateExists,
+    getAllTrips,
+    validateTripDateIsValid,
+    getSeatsByTrip,
+    getOtherSeats,
+    getUserSeats,
+    validateSeatSelection,
+    create
+  );
 
-  router.post('/capacity', reservationController.getRemainingCapacity);
+  // get all reservations for the current user
+  router.get(
+    '/',
+    validateLoggedIn,
+    getAllUserReservations,
+    getAllUserSeats,
+    getAllReservationsInfo
+  );
 
-  router.post('/create', reservationController.create);
+  // delete
+  router.post(
+    '/delete',
+    validateLoggedIn,
+    validateReservationIdExists,
+    validateReservationOwnership,
+    deleteReservation
+  );
 
-  router.get('/', reservationController.allReservations);
-
-  router.post('/delete', reservationController.deleteReservation);
-
-  router.post('/seats', reservationController.getSeats);
+  router.post(
+    '/seats',
+    validateLoggedIn,
+    validateTripDateExists,
+    getAllTrips,
+    validateTripDateIsValid,
+    getSeatsByTrip,
+    getUserSeats,
+    getOtherSeats,
+    getSeats
+  );
 
   app.use('/api/reservation', router);
 };

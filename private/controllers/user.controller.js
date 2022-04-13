@@ -558,6 +558,8 @@ async function getQuestions(req, res) {
 /**
  * Ensure that the user is logged in.
  *
+ * Sets: `res.locals.userId`
+ *
  * Prerequisite(s): `none`
  *
  * @param {Request} req request that is currently being used
@@ -565,6 +567,7 @@ async function getQuestions(req, res) {
  */
 function validateLoggedIn(req, res, next) {
   if (req.session.userID) {
+    res.locals.userId = req.session.userID;
     next();
     return;
   }
@@ -574,7 +577,7 @@ function validateLoggedIn(req, res, next) {
   });
 }
 
-export default {
+export {
   login,
   create,
   checkLogin,
@@ -597,5 +600,5 @@ export default {
   hashSecurityQuestionAnswer,
   validateSecurityQuestionAnswerMatches,
   getQuestions,
-  validateLoggedIn,
+  validateLoggedIn
 };
