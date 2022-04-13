@@ -1,5 +1,3 @@
-'use strict';
-
 const reservation = (sequelize, Sequelize) => {
 
   const Reservation = sequelize.define('reservation', {

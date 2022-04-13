@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable new-cap */
 
 const user = (sequelize, Sequelize) => {
 
