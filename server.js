@@ -1,12 +1,11 @@
 import 'dotenv/config';
 
-import { dirname, path } from 'path';
+import path, { dirname } from 'path';
 
 import db from './private/models/index.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import minify from 'express-minify';
-// import path from 'path';
 import reservationRoutes from './private/routes/reservation.routes.js';
 import session from 'express-session';
 import sessionConfig from './private/config/session.config.js';

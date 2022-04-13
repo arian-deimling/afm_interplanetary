@@ -17,4 +17,3 @@ AD - enable minify
 Bug:
 curl -H 'Content-Type: application/json' -d '{"id": 3}' "http://localhost:8080/api/reservation/delete"
 curl -H 'Content-Type: application/json' -d '{"username":"arian12345","password":"Arian12345","security_question_id":6,"security_question_answer":"Michael","pass_verify":"Arian12345"}' "http://localhost:8080/api/signup"
-
