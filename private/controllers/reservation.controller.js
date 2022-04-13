@@ -413,7 +413,7 @@ function validateSeatSelection(req, res, next) {
  * @param {Response} res response that is currently being used
  * @param {NextFunction} next next request/response handler to call
  */
-const create = async(req, res) => {
+async function create(req, res) {
   // find a reservation associated with the specified trip and user
   let existingReservation = null;
   try {
@@ -462,7 +462,7 @@ const create = async(req, res) => {
   Seat.bulkCreate(createSeats);
 
   res.sendStatus(200);
-};
+}
 
 /**
  * Ensure that a reservation id was provided.
@@ -527,7 +527,7 @@ async function validateReservationOwnership(req, res, next) {
  * @param {Response} res response that is currently being used
  * @param {NextFunction} next next request/response handler to call
  */
-const deleteReservation = async(req, res) => {
+async function deleteReservation(req, res) {
   // delete the reservation
   try {
     await Reservation.destroy({
@@ -545,7 +545,7 @@ const deleteReservation = async(req, res) => {
     where: { reservation_id: res.locals.reservationId, },
   });
   res.sendStatus(200);
-};
+}
 
 export {
   getAvailableTripDates,
