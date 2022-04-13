@@ -196,15 +196,19 @@ function getAvailableTripDates(req, res) {
     if (res.locals.userTrips.length === 0) {
       return true;
     }
-    return res.locals.userTrips.some((y) => y.id !== x.id);
+    return !res.locals.userTrips.some((y) => y.id === x.id);
   });
   // allTrips - unavailableTrips
   const availableTrips = res.locals.allTrips.filter((x) => {
     if (unavailableTrips.length === 0) {
       return true;
     }
-    return unavailableTrips.some((y) => x.id !== y.id);
+    return !unavailableTrips.some((y) => x.id === y.id);
   });
+  console.log(res.locals.atCapacityTrips);
+  console.log(res.locals.userTrips);
+  console.log(unavailableTrips);
+  console.log(availableTrips);
   // return trip dates only
   res.status(200).send(availableTrips.map((x) => x.date));
 }
