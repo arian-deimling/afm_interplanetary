@@ -205,10 +205,6 @@ function getAvailableTripDates(req, res) {
     }
     return !unavailableTrips.some((y) => x.id === y.id);
   });
-  console.log(res.locals.atCapacityTrips);
-  console.log(res.locals.userTrips);
-  console.log(unavailableTrips);
-  console.log(availableTrips);
   // return trip dates only
   res.status(200).send(availableTrips.map((x) => x.date));
 }

@@ -1,5 +1,3 @@
-/* eslint-disable no-alert */
-
 const usernameFieldName = 'username';
 const passwordFieldName = 'password';
 const passwordConfirmFieldName = 'pass_verify';
@@ -299,42 +297,43 @@ class SeatSelection {
   }
 }
 
-$(() => {
-  $('#logout-link').on('click', (e) => {
-    e.preventDefault();
+class SessionExpireDialog {
+  constructor() {
+    // create a jquery ui dialog object
+    this.sessionExpire = $('<div>');
+    this.sessionExpire.dialog({
+      modal: true,
+      autoOpen: false,
+      title: 'Your session has expired!',
+      draggable: false,
+      resizable: false,
+      height: 'auto',
+      width: 'auto',
+      autoResize: true,
+      open: () => {
+        this.sessionExpire.append($('<div>').css('padding', '1rem').
+          html('Please log in again to continue.'));
+        $('.ui-dialog-titlebar-close').remove();
+        $('.ui-dialog-title').css('text-overflow', 'clip');
+      },
+      buttons: {
+        Ok: () => {
+          // dialog reirects the user to the login page
+          window.location.replace('/login');
+        },
+      },
+      create: (event) => {
+        $(event.target).parent().
+          css({ 'position': 'fixed', 'left': 50, 'top': 150, });
+        $('.ui-dialog *').css('font-family', '\'Open Sans\', sans-serif');
+      },
+    });
+  }
 
-    // end all intervals
-    const maxIntervalId = window.setInterval(() => {
-      /* interval does nothing */
-    }, Number.MAX_SAFE_INTEGER);
-    for (let i = 1; i <= maxIntervalId; i++) {
-      window.clearInterval(i);
-    }
-    window.location.replace('/api/user/logout');
-  });
-  let passwordFields = null;
-  $('#show-pass').on('change', () => {
-    if (passwordFields === null) {
-      passwordFields = $('input[type=password]');
-    }
-    if ($('#show-pass').is(':checked')) {
-      passwordFields.attr('type', 'text');
-    } else {
-      passwordFields.attr('type', 'password');
-    }
-  });
-  $('#show-pass-label').on('click', () => {
-    if (passwordFields === null) {
-      passwordFields = $('input[type=password]');
-    }
-    if ($('#show-pass').is(':checked')) {
-      passwordFields.attr('type', 'text');
-    } else {
-      passwordFields.attr('type', 'password');
-    }
-    $('#show-pass').attr('checked', !$('#show-pass').attr('checked'));
-  });
-});
+  open() {
+    this.sessionExpire.dialog('open');
+  }
+}
 
 const locale = window.navigator.userLanguage || window.navigator.language;
 const timezone = new Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -382,7 +381,8 @@ function checkUserLoggedIn() {
 }
 
 function forceLoggedIn() {
-  window.setInterval(async() => {
+  // interval checks wether the user is logged in periodically
+  const interval = window.setInterval(async() => {
     let loggedIn = false;
     try {
       loggedIn = await checkUserLoggedIn();
@@ -390,11 +390,10 @@ function forceLoggedIn() {
       // do nothing on error response from server
       return;
     }
-    // if user becomes logged out, redirect to login page
+    // if user becomes logged out, stop checking and open dialog
     if (!loggedIn) {
-      clearInterval(forceLoggedIn);
-      alert('Your session has expired. Please log in again to continue!');
-      window.location.replace('/login');
+      clearInterval(interval);
+      sessionExpireDialog.open();
     }
   }, 2500);
 }
@@ -485,6 +484,46 @@ function handleServerResponseMany(responseJson, ...args) {
   return false;
 }
 
+$(() => {
+  $('#logout-link').on('click', (e) => {
+    e.preventDefault();
+
+    // end all intervals
+    const maxIntervalId = window.setInterval(() => {
+      /* interval does nothing */
+    }, Number.MAX_SAFE_INTEGER);
+    for (let i = 1; i <= maxIntervalId; i++) {
+      window.clearInterval(i);
+    }
+    window.location.replace('/api/user/logout');
+  });
+  let passwordFields = null;
+  $('#show-pass').on('change', () => {
+    if (passwordFields === null) {
+      passwordFields = $('input[type=password]');
+    }
+    if ($('#show-pass').is(':checked')) {
+      passwordFields.attr('type', 'text');
+    } else {
+      passwordFields.attr('type', 'password');
+    }
+  });
+  $('#show-pass-label').on('click', () => {
+    if (passwordFields === null) {
+      passwordFields = $('input[type=password]');
+    }
+    if ($('#show-pass').is(':checked')) {
+      passwordFields.attr('type', 'text');
+    } else {
+      passwordFields.attr('type', 'password');
+    }
+    $('#show-pass').attr('checked', !$('#show-pass').attr('checked'));
+  });
+});
+
+const sessionExpireDialog = new SessionExpireDialog();
+
+
 export {
   usernameValidity,
   passwordValidity,
@@ -499,12 +538,14 @@ export {
   passwordConfirmFieldName,
   securityQuestionFieldName,
   securityQuestionAnswerFieldName,
+  sessionExpireDialog,
   UsernameInput,
   SecurityQuestionInput,
   PasswordInput,
   SecurityQuestionAnswerInput,
   PasswordConfirmInput,
   SeatSelection,
+  SessionExpireDialog,
   parseDateLocalTimezone,
   hideById,
   showById,

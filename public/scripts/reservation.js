@@ -1,11 +1,10 @@
-/* eslint-disable no-alert */
-
 import {
   SeatSelection,
   checkNumPassengers,
   checkTripDate,
   forceLoggedIn,
   hideById,
+  sessionExpireDialog,
   showById
 } from './util.js';
 
@@ -146,8 +145,7 @@ $(() => {
     }).fail((res) => {
       // if login status error occurs, notify user and redirect to login page
       if (res.status === 400 && res.responseJSON.what === 'login_status') {
-        alert('Your session has expired. Please log in again to continue!');
-        window.location.replace('/login');
+        sessionExpireDialog.open();
         return;
       }
       if (res.status === 400 && res.responseJSON.what === 'num_passengers') {
