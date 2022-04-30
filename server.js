@@ -25,8 +25,8 @@ const SessionStore = sessionSequelize(session.Store);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, }));
 
-// app.use(minify());
-minify();
+app.use(minify());
+// minify();
 
 app.set('views', './private/views');
 app.set('view engine', 'ejs');
@@ -118,5 +118,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`AFM Interplanetary app listening on port ${PORT}`);
 });
